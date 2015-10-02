@@ -124,7 +124,7 @@ def main():
   statistics(stats, False)
 
 def statistics(stats, write = False):
-  stats_str = "{0},{1},{2},{3},{4}\n".format(
+  stats_str = "{0},{1},{2},{3},{4},\n".format(
       int(time.time()), stats["total"], stats["market"], stats["date"], stats["sum"])
   print stats_str
   if write:
