@@ -1,0 +1,10 @@
+img_orig
+txt_old
+preprocessed
+rotated
+img/*
+txt/*
+
+# Test files
+!img/IMG000*.jpg
+!txt/IMG000*.txt
