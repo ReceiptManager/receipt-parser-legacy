@@ -4,6 +4,8 @@ preprocessed
 rotated
 img/*
 txt/*
+.idea
+*.pyc
 
 # Test files
 !img/IMG000*.jpg
