@@ -1,0 +1,56 @@
+---
+# Where the receipts are stored
+# Receipts should be simple text files
+receipts_path: "txt"
+
+# Market names roughly ordered by likelyhood.
+# Can contain market locations for fuzzy parsing
+markets:
+  Penny:
+     - penny
+     - p e n n y
+     - m a r k t gmbh
+  REWE:
+     - rewe
+  Real:
+     - real
+  Netto:
+     - netto-online
+  Kaiser's:
+     - kaiser
+     - kaiserswerther straße 270
+  Aldi:
+     - aldi
+     - friedrichstr 128—133
+  Lidl:
+     - lidl
+  Edeka:
+    - edeka
+  Drogerie:
+     - drogerie
+  Kodi:
+     - kodi
+  Getraenke:
+    - Getraenke Tempel
+  Tanken:
+     - shell
+     - esso station
+     - aral
+     - total tankstelle
+     - RK Tankstellen
+
+# Sum keys roughly ordered by likelyhood.
+sum_keys:
+  - summe
+  - gesamtbetrag
+  - gesamt
+  - total
+  - sum
+  - zwischensumme
+  - bar
+
+sum_format: '\d+(\.\s?|,\s?|[^a-zA-Z\d])\d{2}'
+
+# Matches dates like 19.08.15 19. 08. 2015
+date_format: '.*?(?P<date>(\d{2,4}(\.\s?|[^a-zA-Z\d])\d{2}(\.\s?|[^a-zA-Z\d])(20)?1[3-6]))\s+'
+
