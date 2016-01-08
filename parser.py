@@ -26,11 +26,11 @@ class Receipt(object):
 
     def fuzzy_find(self, keyword, accuracy=0.6):
         """
-    Returns the first line in lines that contains a keyword.
-    It runs a fuzzy match if 0 < accuracy < 1.0
-    :param keyword: The keyword string to look for
-    :param accuracy: Required accuracy for a match of a string with the keyword
-    """
+        Returns the first line in lines that contains a keyword.
+        It runs a fuzzy match if 0 < accuracy < 1.0
+        :param keyword: The keyword string to look for
+        :param accuracy: Required accuracy for a match of a string with the keyword
+        """
         for line in self.raw:
             words = line.split()
             # Get the single best match in line
@@ -94,12 +94,6 @@ def main():
 def read_config():
     stream = open("config.yml", "r")
     docs = yaml.safe_load(stream)
-    """
-    for doc in docs:
-        for k,v in doc.items():
-            print(k, "->", v)
-        print("\n")
-    """
     return objectview(docs)
 
 
