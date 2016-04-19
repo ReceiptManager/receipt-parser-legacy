@@ -4,8 +4,15 @@ Updating your housekeeping book is a tedious task: You need to manually find the
 
 This is a fuzzy receipt parser written in Python. You give it any dirty old receipt lying around and it will try its best to find the correct data for you.
 
-It started as a hackathon project. Read more about it on the [trivago techblog](http://tech.trivago.com/2015/10/06/python_receipt_parser/).  
+It started as a hackathon project. Read more about it on the [trivago techblog](http://tech.trivago.com/2015/10/06/python_receipt_parser/).
 Also read the comments on [HackerNews](https://news.ycombinator.com/item?id=10338199)
+
+# Dependencies
+
+* Python
+    - [PyYAML](http://pyyaml.org/wiki/PyYAMLDocumentation)
+* [Tesseract Open Source OCR Engine](https://github.com/tesseract-ocr/tesseract)
+* [ImageMagick](http://www.imagemagick.org/script/index.php)
 
 # Future Plans
 
