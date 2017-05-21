@@ -16,7 +16,7 @@ class Receipt(object):
         self.config = config
         self.market = self.date = self.sum = None
         self.raw = map(str.lower, raw)
-        self.raw = [line.decode('utf-8') for line in self.raw]
+        #self.raw = [line.decode('utf-8') for line in self.raw]
         self.parse()
 
     def parse(self):
@@ -52,7 +52,7 @@ class Receipt(object):
                 for spelling in spellings:
                     line = self.fuzzy_find(spelling, accuracy)
                     if line:
-                        print line, accuracy, market
+                        print(line, accuracy, market)
                         return market
 
     def parse_sum(self):
