@@ -38,6 +38,8 @@ markets:
      - aral
      - total tankstelle
      - RK Tankstellen
+  Migros:
+     - genossenschaft migros
 
 # Sum keys roughly ordered by likelyhood.
 sum_keys:

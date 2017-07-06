@@ -15,9 +15,25 @@ class Receipt(object):
     def __init__(self, config, raw):
         self.config = config
         self.market = self.date = self.sum = None
-        self.raw = map(str.lower, raw)
-        self.raw = [line.decode('utf-8') for line in self.raw]
+        self.raw = self.normalize(raw)
         self.parse()
+
+    def normalize(self, raw):
+        """ Inputs a list of raw lines
+
+            1) strip empty lines
+            2) convert to lowercase
+            3) encoding?
+
+        """
+        normalized_lines = []
+        for line in raw:
+            norm_line = line.strip()
+            if not norm_line:
+                continue
+            norm_line = norm_line.lower()
+            normalized_lines.append(norm_line)
+        return normalized_lines
 
     def parse(self):
         self.market = self.parse_market()
@@ -52,7 +68,7 @@ class Receipt(object):
                 for spelling in spellings:
                     line = self.fuzzy_find(spelling, accuracy)
                     if line:
-                        print line, accuracy, market
+                        print(line, accuracy, market)
                         return market
 
     def parse_sum(self):
@@ -70,11 +86,13 @@ class Receipt(object):
 
 def main():
     config = read_config()
-    receipt_files = [f for f in listdir(config.receipts_path) if isfile(join(config.receipts_path, f))]
+    receipt_files = [f for f in listdir(config.receipts_path)
+                     if isfile(join(config.receipts_path, f))]
     # Ignore hidden files like .DS_Store
     receipt_files = [f for f in receipt_files if not f.startswith('.')]
     stats = defaultdict(int)
 
+    print('Text, Market, Date, Sum')
     for receipt_file in receipt_files:
         receipt_path = join(config.receipts_path, receipt_file)
         with open(receipt_path) as receipt:
@@ -98,8 +116,8 @@ def read_config():
 
 
 def statistics(stats, write=False):
-    stats_str = "{0},{1},{2},{3},{4},\n".format(
-        int(time.time()), stats["total"], stats["market"], stats["date"], stats["sum"])
+    stats_str = "{0:10.0f},{1:d},{2:d},{3:d},{4:d},\n".format(
+        time.time(), stats["total"], stats["market"], stats["date"], stats["sum"])
     print(stats_str)
     if write:
         with open("stats.csv", "a") as stats_file:
