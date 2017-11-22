@@ -16,19 +16,23 @@
 # limitations under the License.
 
 
+import os
 import re
 import time
 from collections import defaultdict
 from difflib import get_close_matches
-from os import listdir
-from os.path import isfile, join
 
 import yaml
 
 from objectview import ObjectView
 
+THIS_FOLDER = os.getcwd()
+STATS_OUTPUT_FORMAT = "{0:10.0f},{1:d},{2:d},{3:d},{4:d},\n"
+
 
 class Receipt(object):
+    """ Market receipt to be parsed """
+
     def __init__(self, config, raw):
         self.config = config
         self.market = self.date = self.sum = None
@@ -105,17 +109,69 @@ class Receipt(object):
                     return sum_float.group(0)
 
 
+def read_config(file="config.yml"):
+    """
+    :param file: str
+        Name of file to read
+    :return: ObjectView
+        Reads config file
+    """
+
+    stream = open(os.path.join(THIS_FOLDER, file), "r")
+    docs = yaml.safe_load(stream)
+    return ObjectView(docs)
+
+
+def output_statistics(stats, write_file=False):
+    """
+    :param stats: {}
+        Statistics details
+    :param write_file: bool
+        True iff you want output file
+    :return: void
+        Prints stats (and eventually writes them)
+    """
+
+    stats_str = STATS_OUTPUT_FORMAT.format(
+        time.time(), stats["total"], stats["market"], stats["date"],
+        stats["sum"]
+    )
+    print(stats_str)
+
+    if write_file:
+        with open("stats.csv", "a") as stats_file:
+            stats_file.write(stats_str)
+
+
+def percent(numerator, denominator):
+    """
+    :param numerator: float
+        Numerator of fraction
+    :param denominator: float
+        Denominator of fraction
+    :return: str
+        Fraction as percentage
+    """
+
+    if denominator == 0:
+        out = "0"
+    else:
+        out = str(int(numerator / float(denominator) * 100))
+
+    return out + "%"
+
+
 def main():
     config = read_config()
-    receipt_files = [f for f in listdir(config.receipts_path)
-                     if isfile(join(config.receipts_path, f))]
+    receipt_files = [f for f in os.listdir(config.receipts_path)
+                     if os.path.isfile(os.path.join(config.receipts_path, f))]
     # Ignore hidden files like .DS_Store
     receipt_files = [f for f in receipt_files if not f.startswith('.')]
     stats = defaultdict(int)
 
     print('Text, Market, Date, Sum')
     for receipt_file in receipt_files:
-        receipt_path = join(config.receipts_path, receipt_file)
+        receipt_path = os.path.join(config.receipts_path, receipt_file)
         with open(receipt_path) as receipt:
             lines = receipt.readlines()
             receipt = Receipt(config, lines)
@@ -127,26 +183,7 @@ def main():
                 stats["date"] += 1
             if receipt.sum:
                 stats["sum"] += 1
-    statistics(stats, False)
-
-
-def read_config():
-    stream = open("config.yml", "r")
-    docs = yaml.safe_load(stream)
-    return ObjectView(docs)
-
-
-def statistics(stats, write=False):
-    stats_str = "{0:10.0f},{1:d},{2:d},{3:d},{4:d},\n".format(
-        time.time(), stats["total"], stats["market"], stats["date"], stats["sum"])
-    print(stats_str)
-    if write:
-        with open("stats.csv", "a") as stats_file:
-            stats_file.write(stats_str)
-
-
-def percent(nom, denom):
-    return str(int(nom / float(denom) * 100)) + "%"
+    output_statistics(stats, False)
 
 
 if __name__ == "__main__":
