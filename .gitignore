@@ -6,7 +6,9 @@ img/*
 txt/*
 .idea
 *.pyc
+stats.csv
 
 # Test files
 !img/IMG000*.jpg
 !txt/IMG000*.txt
+__pycache__/
