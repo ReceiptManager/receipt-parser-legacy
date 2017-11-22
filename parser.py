@@ -1,14 +1,31 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
+# !/usr/bin/python3
+# coding: utf-8
 
-import time
+# Copyright 2015-2018
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+# http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+
 import re
+import time
+from collections import defaultdict
+from difflib import get_close_matches
 from os import listdir
 from os.path import isfile, join
-from difflib import get_close_matches
-from collections import defaultdict
-from objectview import objectview
+
 import yaml
+
+from objectview import ObjectView
 
 
 class Receipt(object):
@@ -42,11 +59,15 @@ class Receipt(object):
 
     def fuzzy_find(self, keyword, accuracy=0.6):
         """
-        Returns the first line in lines that contains a keyword.
-        It runs a fuzzy match if 0 < accuracy < 1.0
-        :param keyword: The keyword string to look for
-        :param accuracy: Required accuracy for a match of a string with the keyword
+        :param keyword: str
+            The keyword string to look for
+        :param accuracy: float
+            Required accuracy for a match of a string with the keyword
+        :return: str
+            Returns the first line in lines that contains a keyword.
+            It runs a fuzzy match if 0 < accuracy < 1.0
         """
+
         for line in self.raw:
             words = line.split()
             # Get the single best match in line
@@ -112,7 +133,7 @@ def main():
 def read_config():
     stream = open("config.yml", "r")
     docs = yaml.safe_load(stream)
-    return objectview(docs)
+    return ObjectView(docs)
 
 
 def statistics(stats, write=False):
