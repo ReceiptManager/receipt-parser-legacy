@@ -171,12 +171,12 @@ def get_files_in_folder(folder, include_hidden=False):
     ]  # just files
 
 
-def output_statistics(stats, write_file=False):
+def output_statistics(stats, write_file="stats.csv"):
     """
     :param stats: {}
         Statistics details
-    :param write_file: bool
-        True iff you want output file
+    :param write_file: obj
+        str iff you want output file (or else None)
     :return: void
         Prints stats (and eventually writes them)
     """
@@ -188,7 +188,7 @@ def output_statistics(stats, write_file=False):
     print(stats_str)
 
     if write_file:
-        with open("stats.csv", "a") as stats_file:
+        with open(write_file, "a") as stats_file:
             stats_file.write(stats_str)
 
 
@@ -245,7 +245,7 @@ def main():
     config = read_config()
     receipt_files = get_files_in_folder(config.receipts_path)
     stats = ocr_receipts(config, receipt_files)
-    output_statistics(stats, False)
+    output_statistics(stats)
 
 
 if __name__ == "__main__":
