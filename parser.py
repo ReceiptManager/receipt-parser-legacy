@@ -28,35 +28,45 @@ from objectview import ObjectView
 
 THIS_FOLDER = os.getcwd()
 STATS_OUTPUT_FORMAT = "{0:10.0f},{1:d},{2:d},{3:d},{4:d},\n"
+VERBOSE_OUTPUT_FORMAT = "Text, Market, Date, Sum"
 
 
 class Receipt(object):
     """ Market receipt to be parsed """
 
     def __init__(self, config, raw):
+        """
+        :param config: ObjectView
+            Config object 
+        :param raw: [] of str
+            Lines in file
+        """
+        
         self.config = config
         self.market = self.date = self.sum = None
-        self.raw = self.normalize(raw)
+        self.lines = raw
+        self.normalize()
         self.parse()
 
-    def normalize(self, raw):
-        """ Inputs a list of raw lines
-
+    def normalize(self):
+        """
+        :return: void
             1) strip empty lines
             2) convert to lowercase
             3) encoding?
 
         """
-        normalized_lines = []
-        for line in raw:
-            norm_line = line.strip()
-            if not norm_line:
-                continue
-            norm_line = norm_line.lower()
-            normalized_lines.append(norm_line)
-        return normalized_lines
+
+        self.lines = [
+            line.lower() for line in self.lines if line.strip()
+        ]
 
     def parse(self):
+        """
+        :return: void
+            Parses obj data
+        """
+        
         self.market = self.parse_market()
         self.date = self.parse_date()
         self.sum = self.parse_sum()
@@ -72,7 +82,7 @@ class Receipt(object):
             It runs a fuzzy match if 0 < accuracy < 1.0
         """
 
-        for line in self.raw:
+        for line in self.lines:
             words = line.split()
             # Get the single best match in line
             matches = get_close_matches(keyword, words, 1, accuracy)
@@ -80,15 +90,25 @@ class Receipt(object):
                 return line
 
     def parse_date(self):
-        for line in self.raw:
+        """
+        :return: date
+            Parses data
+        """
+
+        for line in self.lines:
             m = re.match(self.config.date_format, line)
-            if m:
-                # We're happy with the first match for now
+            if m:  # We"re happy with the first match for now
                 return m.group(1)
 
     def parse_market(self):
+        """
+        :return: str
+            Parses market data
+        """
+        
         for int_accuracy in range(10, 6, -1):
             accuracy = int_accuracy / 10.0
+
             for market, spellings in self.config.markets.items():
                 for spelling in spellings:
                     line = self.fuzzy_find(spelling, accuracy)
@@ -97,12 +117,17 @@ class Receipt(object):
                         return market
 
     def parse_sum(self):
+        """
+        :return: str
+            Parses sum data
+        """
+        
         for sum_key in self.config.sum_keys:
             sum_line = self.fuzzy_find(sum_key)
             if sum_line:
                 # Replace all commas with a dot to make
                 # finding and parsing the sum easier
-                sum_line = sum_line.replace(',', '.')
+                sum_line = sum_line.replace(",", ".")
                 # Parse the sum
                 sum_float = re.search(self.config.sum_format, sum_line)
                 if sum_float:
@@ -114,12 +139,36 @@ def read_config(file="config.yml"):
     :param file: str
         Name of file to read
     :return: ObjectView
-        Reads config file
+        Parsed config file
     """
 
     stream = open(os.path.join(THIS_FOLDER, file), "r")
     docs = yaml.safe_load(stream)
     return ObjectView(docs)
+
+
+def get_files_in_folder(folder, include_hidden=False):
+    """
+    :param folder: str
+        Path to folder to list
+    :param include_hidden: bool
+        True iff you want also hidden files
+    :return: [] of str
+        List of full path of files in folder
+    """
+
+    files = os.listdir(folder)  # list content of folder
+    if not include_hidden:  # avoid files starting with "."
+        files = [
+            f for f in files if not f.startswith(".")
+        ]  # 
+
+    files = [
+        os.path.join(folder, f) for f in files
+    ]  # complete path
+    return [
+        f for f in files if os.path.isfile(f)
+    ]  # just files
 
 
 def output_statistics(stats, write_file=False):
@@ -161,21 +210,23 @@ def percent(numerator, denominator):
     return out + "%"
 
 
-def main():
-    config = read_config()
-    receipt_files = [f for f in os.listdir(config.receipts_path)
-                     if os.path.isfile(os.path.join(config.receipts_path, f))]
-    # Ignore hidden files like .DS_Store
-    receipt_files = [f for f in receipt_files if not f.startswith('.')]
-    stats = defaultdict(int)
+def ocr_receipts(config, receipt_files):
+    """
+    :param config: ObjectView
+        Parsed config file
+    :param receipt_files: [] of str
+        List of files to parse
+    :return: {}
+        Stats about files
+    """
 
-    print('Text, Market, Date, Sum')
-    for receipt_file in receipt_files:
-        receipt_path = os.path.join(config.receipts_path, receipt_file)
+    stats = defaultdict(int)
+    print(VERBOSE_OUTPUT_FORMAT)
+    for receipt_path in receipt_files:
         with open(receipt_path) as receipt:
-            lines = receipt.readlines()
-            receipt = Receipt(config, lines)
+            receipt = Receipt(config, receipt.readlines())
             print(receipt_path, receipt.market, receipt.date, receipt.sum)
+
             stats["total"] += 1
             if receipt.market:
                 stats["market"] += 1
@@ -183,6 +234,17 @@ def main():
                 stats["date"] += 1
             if receipt.sum:
                 stats["sum"] += 1
+    return stats
+
+
+def main():
+    """
+    :return:
+    """
+
+    config = read_config()
+    receipt_files = get_files_in_folder(config.receipts_path)
+    stats = ocr_receipts(config, receipt_files)
     output_statistics(stats, False)
 
 
