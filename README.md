@@ -8,14 +8,20 @@ It started as a hackathon project. Read more about it on the [trivago techblog](
 Also read the comments on [HackerNews](https://news.ycombinator.com/item?id=10338199)  
 Oh hey! And there's also a [talk online](https://www.youtube.com/watch?v=TuDeUsIlJz4) now if you're the visual kind of person.
 
-# Dependencies
+## Dependencies
 
-* Python
-    - [PyYAML](http://pyyaml.org/wiki/PyYAMLDocumentation)
 * [Tesseract Open Source OCR Engine](https://github.com/tesseract-ocr/tesseract)
 * [ImageMagick](http://www.imagemagick.org/script/index.php)
 
-# Future Plans
+## Usage
+
+To convert all images from the `img/` folder to text using tesseract and parse the resulting text files, run
+
+```
+make run
+```
+
+## Future Plans
 
 The plan is to write the parsed receipt data into a CSV file. This is enough to create a graph with GnuPlot or any spreadsheet tool. If you want to get fancy, write an output for ElasticSearch and create a nice Kibana dashboard. I'm happy for any pull request.
 
