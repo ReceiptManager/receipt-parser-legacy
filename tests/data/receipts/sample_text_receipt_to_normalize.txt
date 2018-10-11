@@ -1,0 +1,15 @@
+ALL UPPER CASE
+
+Some Upper Case
+
+   White Spaces
+
+    tab     tab whitespaces
+
+99.00
+
+
+
+Trailing whitespaces after this line.
+
+
