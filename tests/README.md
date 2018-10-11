@@ -3,7 +3,7 @@
 from the main folder, run:
 
 ```
-python -m unittest tests/test_parser.py
+python -m unittest -v tests/test_parser.py
 ```
 
 ## Known issues
