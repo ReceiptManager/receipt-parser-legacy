@@ -41,6 +41,7 @@ class ReceiptTestCase(unittest.TestCase):
         self.assertEquals("supermarket\n", receipt.fuzzy_find("market"))
 
     def test_normalize(self):
+        """ tests for normalize """
         receipt = None
         # unfortunately, the Receipt constructor calls 'normalize'
         # so we can construct a Receipt object with a blank receipt file
