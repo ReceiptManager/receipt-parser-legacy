@@ -7,8 +7,9 @@ name = "pypi"
 pillow = "*"
 pyyaml = "*"
 "send2trash" = "*"
+pytest = "*"
 
 [dev-packages]
 
 [requires]
-python_version = "3.7"
+python_version = "3.4"
