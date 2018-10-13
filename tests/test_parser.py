@@ -26,12 +26,19 @@ class ReceiptTestCase(unittest.TestCase):
     config = read_config(file=dir_path + "/data/config.yml")
 
     def test_fuzzy_find(self):
-        # TODO: finish implementation
+        """
+            verifies fuzzy_find
+        """
         receipt = None
-        with open(self.dir_path + "/data/receipts/sample_text_receipt.txt") as receipt_file:
+        with open(self.dir_path + "/data/receipts/sample_text_fuzzy_find.txt") as receipt_file:
             receipt = Receipt(self.config, receipt_file.readlines())
-
         self.assertIsNotNone(receipt)
+
+        self.assertEquals("restaurant\n", receipt.fuzzy_find("restaurat"))
+        self.assertEquals("gas station\n", receipt.fuzzy_find("as statio"))
+        self.assertEquals("uber\n", receipt.fuzzy_find("ube"))
+        self.assertEquals("lyft\n", receipt.fuzzy_find("ly"))
+        self.assertEquals("supermarket\n", receipt.fuzzy_find("market"))
 
     def test_normalize(self):
         receipt = None
@@ -134,24 +141,101 @@ class ReceiptTestCase(unittest.TestCase):
         print(actual_date_str)
         self.assertEquals("18.08.2017", actual_date_str)
 
-
     def test_parse_market(self):
-        # TODO: will implement along with test_fuzzy_find
-        receipt = None
-        with open(self.dir_path + "/data/receipts/sample_text_receipt.txt") as receipt_file:
-            receipt = Receipt(self.config, receipt_file.readlines())
+        """
+            Verifies parser.parse_market
+        """
+        receipt = Receipt(self.config, ["penny"])
+        print("market", receipt.parse_market())
+        self.assertEquals("Penny", receipt.parse_market())
 
-        self.assertIsNotNone(receipt)
-        receipt.parse_market()
+        # should work but fails
+        receipt = Receipt(self.config, ["p e n ny"])
+        self.assertEquals("Penny", receipt.parse_market())
+
+        # should work but fails
+        receipt = Receipt(self.config, ["m a r k t gmbh"])
+        self.assertEquals("Penny", receipt.parse_market())
+
+        receipt = Receipt(self.config, ["rew"])
+        self.assertEquals("REWE", receipt.parse_market())
+
+        receipt = Receipt(self.config, ["REL"])
+        self.assertEquals("Real", receipt.parse_market())
+
+        receipt = Receipt(self.config, ["netto-onli"])
+        self.assertEquals("Netto", receipt.parse_market())
+
+        receipt = Receipt(self.config, ["kaser"])
+        self.assertEquals("Kaiser's", receipt.parse_market())
+
+        receipt = Receipt(self.config, ["kaiserswerther str. 270"])
+        self.assertEquals("Kaiser's", receipt.parse_market())
+
+        receipt = Receipt(self.config, ["ALDI"])
+        self.assertEquals("Aldi", receipt.parse_market())
+
+        receipt = Receipt(self.config, ["friedrichstr. 128—133"])
+        self.assertEquals("Aldi", receipt.parse_market())
+
+        receipt = Receipt(self.config, ["LIDL"])
+        self.assertEquals("Lidl", receipt.parse_market())
+
+        receipt = Receipt(self.config, ["shell"])
+        self.assertEquals("Tanken", receipt.parse_market())
+
+        receipt = Receipt(self.config, ["esso station"])
+        self.assertEquals("Tanken", receipt.parse_market())
+
+        receipt = Receipt(self.config, ["aral"])
+        self.assertEquals("Tanken", receipt.parse_market())
+
+        receipt = Receipt(self.config, ["total tankstelle"])
+        self.assertEquals("Tanken", receipt.parse_market())
+
+        receipt = Receipt(self.config, ["RK Tankstellen"])
+        self.assertEquals("Tanken", receipt.parse_market())
 
     def test_parse_sum(self):
-        # TODO: will implement along with test_fuzzy_find
+        """
+            Verifies parse_sum
+        """
         receipt = None
         with open(self.dir_path + "/data/receipts/sample_text_receipt.txt") as receipt_file:
             receipt = Receipt(self.config, receipt_file.readlines())
-
         self.assertIsNotNone(receipt)
-        receipt.parse_sum()
+        self.assertEquals("0.99", receipt.parse_sum())
+
+        receipt = Receipt(self.config, ["summe   12,99\n"])
+        self.assertEquals("12.99", receipt.parse_sum())
+
+        receipt = Receipt(self.config, ["summe   *** 12,99 ***\n"])
+        self.assertEquals("12.99", receipt.parse_sum())
+
+        receipt = Receipt(self.config, ["summe   13.99\n"])
+        self.assertEquals("13.99", receipt.parse_sum())
+
+        receipt = Receipt(self.config, ["13,99 summe\n"])
+        self.assertEquals("13.99", receipt.parse_sum())
+
+        receipt = Receipt(self.config, ["gesamtbetrag 1,99\n"])
+        self.assertEquals("1.99", receipt.parse_sum())
+
+        receipt = Receipt(self.config, ["gesamt 2,99\n"])
+        self.assertEquals("2.99", receipt.parse_sum())
+
+        receipt = Receipt(self.config, ["total 3,99\n"])
+        self.assertEquals("3.99", receipt.parse_sum())
+
+        receipt = Receipt(self.config, ["sum 4,99\n"])
+        self.assertEquals("4.99", receipt.parse_sum())
+
+        receipt = Receipt(self.config, ["zwischensumme 5,99\n"])
+        self.assertEquals("5.99", receipt.parse_sum())
+
+        receipt = Receipt(self.config, ["bar 1,99\n"])
+        self.assertEquals("1.99", receipt.parse_sum())
+
 
 if __name__ == '__main__':
     unittest.main()
