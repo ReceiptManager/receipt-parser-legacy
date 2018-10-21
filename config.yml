@@ -1,7 +1,7 @@
 ---
 # Where the receipts are stored
 # Receipts should be simple text files
-receipts_path: "txt"
+receipts_path: "data/txt"
 
 # Market names roughly ordered by likelyhood.
 # Can contain market locations for fuzzy parsing

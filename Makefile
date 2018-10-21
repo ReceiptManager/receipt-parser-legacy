@@ -2,13 +2,13 @@
 install:
 	pipenv install
 
-.PHONY: parse
+.PHONY: parser
 parse:
-	pipenv run python parser.py
+	pipenv run python $(PWD)/parser/parser.py
 
-.PHONY: import
+.PHONY: importer
 import:
-	pipenv run python importer.py
+	pipenv run python $(PWD)/parser/importer.py
 
 .PHONY: run
-run: importer parse
+run: importer parser
