@@ -21,10 +21,10 @@ import os
 from PIL import Image
 from send2trash import send2trash
 
-THIS_FOLDER = os.getcwd()
-INPUT_FOLDER = os.path.join(THIS_FOLDER, "img")
-TMP_FOLDER = os.path.join(THIS_FOLDER, "tmp")
-OUTPUT_FOLDER = os.path.join(THIS_FOLDER, "txt")
+BASE_PATH = os.path.dirname(os.getcwd())
+INPUT_FOLDER = os.path.join(BASE_PATH, "data/img")
+TMP_FOLDER = os.path.join(BASE_PATH, "data/tmp")
+OUTPUT_FOLDER = os.path.join(BASE_PATH, "data/txt")
 
 
 def prepare_folders():
