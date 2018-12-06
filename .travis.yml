@@ -3,6 +3,11 @@ python:
   - "3.4"
   - "3.5"
   - "3.6"
-# command to run tests
+
+install:
+  - "pip install pipenv"
+  - "pipenv lock"
+  - "pipenv install --dev"
+
 script:
   - make test
