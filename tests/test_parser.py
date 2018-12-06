@@ -17,13 +17,14 @@
 
 import os
 import unittest
-from parser import Receipt, read_config
+from parser.parser import read_config
+from parser.receipt import Receipt
 
 
 class ReceiptTestCase(unittest.TestCase):
     """Tests for `parser.py`."""
     dir_path = os.path.dirname(os.path.realpath(__file__))
-    config = read_config(file=dir_path + "/data/config.yml")
+    config = read_config(config=dir_path + "/data/config.yml")
 
     def test_fuzzy_find(self):
         """
@@ -34,11 +35,11 @@ class ReceiptTestCase(unittest.TestCase):
             receipt = Receipt(self.config, receipt_file.readlines())
         self.assertIsNotNone(receipt)
 
-        self.assertEquals("restaurant\n", receipt.fuzzy_find("restaurat"))
-        self.assertEquals("gas station\n", receipt.fuzzy_find("as statio"))
-        self.assertEquals("uber\n", receipt.fuzzy_find("ube"))
-        self.assertEquals("lyft\n", receipt.fuzzy_find("ly"))
-        self.assertEquals("supermarket\n", receipt.fuzzy_find("market"))
+        self.assertEqual("restaurant\n", receipt.fuzzy_find("restaurat"))
+        self.assertEqual("gas station\n", receipt.fuzzy_find("as statio"))
+        self.assertEqual("uber\n", receipt.fuzzy_find("ube"))
+        self.assertEqual("lyft\n", receipt.fuzzy_find("ly"))
+        self.assertEqual("supermarket\n", receipt.fuzzy_find("market"))
 
     def test_normalize(self):
         receipt = None
@@ -67,7 +68,7 @@ class ReceiptTestCase(unittest.TestCase):
         after_lines = receipt.lines
 
         # checks that the lines are normalized
-        self.assertEquals(expected_list, after_lines)
+        self.assertEqual(expected_list, after_lines)
 
     def test_parse(self):
         # not sure there's a need to unit test this one since it essentially wraps other unit tests
@@ -89,19 +90,19 @@ class ReceiptTestCase(unittest.TestCase):
             receipt = Receipt(self.config, receipt_file.readlines())
         actual_date_str = receipt.date
         print(actual_date_str)
-        self.assertEquals("19.08.15", actual_date_str)
+        self.assertEqual("19.08.15", actual_date_str)
 
         ### test DD.MM.YY
         receipt2 = Receipt(self.config, ["18.08.16\n", "19.09.17\n", "01.01.18"])
         actual_date_str = receipt2.parse_date()
         print(actual_date_str)
-        self.assertEquals("18.08.16", actual_date_str)
+        self.assertEqual("18.08.16", actual_date_str)
 
         ### test DD.MM.YYYY
         receipt3 = Receipt(self.config, ["18.08.2016\n"])
         actual_date_str = receipt3.parse_date()
         print(actual_date_str)
-        self.assertEquals("18.08.2016", actual_date_str)
+        self.assertEqual("18.08.2016", actual_date_str)
 
         ### HOWEVER these tests should fail:
         ### test with DD > 31
@@ -110,7 +111,7 @@ class ReceiptTestCase(unittest.TestCase):
         print(actual_date_str)
         # 32.08.2017 is invalid
         self.assertNotEqual("32.08.2016", actual_date_str)
-        self.assertEquals(None, actual_date_str)
+        self.assertEqual(None, actual_date_str)
 
         ### test with MM > 12
         receipt5 = Receipt(self.config, ["01.55.2016\n"])
@@ -118,7 +119,7 @@ class ReceiptTestCase(unittest.TestCase):
         print(actual_date_str)
         # 01.55.2016 is invalid
         self.assertNotEquals("01.55.2016", actual_date_str)
-        self.assertEquals(None, actual_date_str)
+        self.assertEqual(None, actual_date_str)
 
         ### test with invalid date: 31.04.15
         receipt6 = Receipt(self.config, ["31.04.15\n"])
@@ -126,20 +127,20 @@ class ReceiptTestCase(unittest.TestCase):
         print(actual_date_str)
         # 31.04.15 is invalid
         self.assertNotEqual("31.04.15", actual_date_str)
-        self.assertEquals(None, actual_date_str)
+        self.assertEqual(None, actual_date_str)
 
         ### And these tests should pass:
         ### test with YYYY < 2013
         receipt7 = Receipt(self.config, ["18.08.2012\n"])
         actual_date_str = receipt7.parse_date()
         print(actual_date_str)
-        self.assertEquals("18.08.2012", actual_date_str)
+        self.assertEqual("18.08.2012", actual_date_str)
 
         ### test with YYYY >= 2017
         receipt8 = Receipt(self.config, ["18.08.2017\n"])
         actual_date_str = receipt8.parse_date()
         print(actual_date_str)
-        self.assertEquals("18.08.2017", actual_date_str)
+        self.assertEqual("18.08.2017", actual_date_str)
 
     def test_parse_market(self):
         """
@@ -147,54 +148,54 @@ class ReceiptTestCase(unittest.TestCase):
         """
         receipt = Receipt(self.config, ["penny"])
         print("market", receipt.parse_market())
-        self.assertEquals("Penny", receipt.parse_market())
+        self.assertEqual("Penny", receipt.parse_market())
 
         # should work but fails
         receipt = Receipt(self.config, ["p e n ny"])
-        self.assertEquals("Penny", receipt.parse_market())
+        self.assertEqual("Penny", receipt.parse_market())
 
         # should work but fails
         receipt = Receipt(self.config, ["m a r k t gmbh"])
-        self.assertEquals("Penny", receipt.parse_market())
+        self.assertEqual("Penny", receipt.parse_market())
 
         receipt = Receipt(self.config, ["rew"])
-        self.assertEquals("REWE", receipt.parse_market())
+        self.assertEqual("REWE", receipt.parse_market())
 
         receipt = Receipt(self.config, ["REL"])
-        self.assertEquals("Real", receipt.parse_market())
+        self.assertEqual("Real", receipt.parse_market())
 
         receipt = Receipt(self.config, ["netto-onli"])
-        self.assertEquals("Netto", receipt.parse_market())
+        self.assertEqual("Netto", receipt.parse_market())
 
         receipt = Receipt(self.config, ["kaser"])
-        self.assertEquals("Kaiser's", receipt.parse_market())
+        self.assertEqual("Kaiser's", receipt.parse_market())
 
         receipt = Receipt(self.config, ["kaiserswerther str. 270"])
-        self.assertEquals("Kaiser's", receipt.parse_market())
+        self.assertEqual("Kaiser's", receipt.parse_market())
 
         receipt = Receipt(self.config, ["ALDI"])
-        self.assertEquals("Aldi", receipt.parse_market())
+        self.assertEqual("Aldi", receipt.parse_market())
 
         receipt = Receipt(self.config, ["friedrichstr. 128—133"])
-        self.assertEquals("Aldi", receipt.parse_market())
+        self.assertEqual("Aldi", receipt.parse_market())
 
         receipt = Receipt(self.config, ["LIDL"])
-        self.assertEquals("Lidl", receipt.parse_market())
+        self.assertEqual("Lidl", receipt.parse_market())
 
         receipt = Receipt(self.config, ["shell"])
-        self.assertEquals("Tanken", receipt.parse_market())
+        self.assertEqual("Tanken", receipt.parse_market())
 
         receipt = Receipt(self.config, ["esso station"])
-        self.assertEquals("Tanken", receipt.parse_market())
+        self.assertEqual("Tanken", receipt.parse_market())
 
         receipt = Receipt(self.config, ["aral"])
-        self.assertEquals("Tanken", receipt.parse_market())
+        self.assertEqual("Tanken", receipt.parse_market())
 
         receipt = Receipt(self.config, ["total tankstelle"])
-        self.assertEquals("Tanken", receipt.parse_market())
+        self.assertEqual("Tanken", receipt.parse_market())
 
         receipt = Receipt(self.config, ["RK Tankstellen"])
-        self.assertEquals("Tanken", receipt.parse_market())
+        self.assertEqual("Tanken", receipt.parse_market())
 
     def test_parse_sum(self):
         """
@@ -204,37 +205,37 @@ class ReceiptTestCase(unittest.TestCase):
         with open(self.dir_path + "/data/receipts/sample_text_receipt.txt") as receipt_file:
             receipt = Receipt(self.config, receipt_file.readlines())
         self.assertIsNotNone(receipt)
-        self.assertEquals("0.99", receipt.parse_sum())
+        self.assertEqual("0.99", receipt.parse_sum())
 
         receipt = Receipt(self.config, ["summe   12,99\n"])
-        self.assertEquals("12.99", receipt.parse_sum())
+        self.assertEqual("12.99", receipt.parse_sum())
 
         receipt = Receipt(self.config, ["summe   *** 12,99 ***\n"])
-        self.assertEquals("12.99", receipt.parse_sum())
+        self.assertEqual("12.99", receipt.parse_sum())
 
         receipt = Receipt(self.config, ["summe   13.99\n"])
-        self.assertEquals("13.99", receipt.parse_sum())
+        self.assertEqual("13.99", receipt.parse_sum())
 
         receipt = Receipt(self.config, ["13,99 summe\n"])
-        self.assertEquals("13.99", receipt.parse_sum())
+        self.assertEqual("13.99", receipt.parse_sum())
 
         receipt = Receipt(self.config, ["gesamtbetrag 1,99\n"])
-        self.assertEquals("1.99", receipt.parse_sum())
+        self.assertEqual("1.99", receipt.parse_sum())
 
         receipt = Receipt(self.config, ["gesamt 2,99\n"])
-        self.assertEquals("2.99", receipt.parse_sum())
+        self.assertEqual("2.99", receipt.parse_sum())
 
         receipt = Receipt(self.config, ["total 3,99\n"])
-        self.assertEquals("3.99", receipt.parse_sum())
+        self.assertEqual("3.99", receipt.parse_sum())
 
         receipt = Receipt(self.config, ["sum 4,99\n"])
-        self.assertEquals("4.99", receipt.parse_sum())
+        self.assertEqual("4.99", receipt.parse_sum())
 
         receipt = Receipt(self.config, ["zwischensumme 5,99\n"])
-        self.assertEquals("5.99", receipt.parse_sum())
+        self.assertEqual("5.99", receipt.parse_sum())
 
         receipt = Receipt(self.config, ["bar 1,99\n"])
-        self.assertEquals("1.99", receipt.parse_sum())
+        self.assertEqual("1.99", receipt.parse_sum())
 
 
 if __name__ == '__main__':

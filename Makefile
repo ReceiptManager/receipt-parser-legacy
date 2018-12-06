@@ -12,3 +12,7 @@ import:
 
 .PHONY: run
 run: import parse
+
+.PHONY: test
+test:
+	pipenv run pytest

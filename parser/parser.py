@@ -22,8 +22,8 @@ from collections import defaultdict
 
 import yaml
 
-from objectview import ObjectView
-from receipt import Receipt
+from parser.objectview import ObjectView
+from parser.receipt import Receipt
 
 BASE_PATH = os.path.dirname(os.getcwd())
 STATS_OUTPUT_FORMAT = "{0:10.0f},{1:d},{2:d},{3:d},{4:d},\n"
