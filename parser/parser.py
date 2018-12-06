@@ -30,14 +30,14 @@ STATS_OUTPUT_FORMAT = "{0:10.0f},{1:d},{2:d},{3:d},{4:d},\n"
 VERBOSE_OUTPUT_FORMAT = "Text, Market, Date, Sum"
 
 
-def read_config(file="config.yml"):
+def read_config(config="config.yml"):
     """
     :param file: str
         Name of file to read
     :return: ObjectView
         Parsed config file
     """
-    with open(os.path.join(BASE_PATH, file), 'r') as stream:
+    with open(config, 'r') as stream:
         try:
             docs = yaml.safe_load(stream)
             return ObjectView(docs)
