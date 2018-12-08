@@ -29,7 +29,13 @@ A Dockerfile is available with all dependencies needed to run the program.
 To build the image, run
 
 ```
-make docker
+make docker-build
+```
+
+To run it on the sample files, try
+
+```
+make docker-run
 ```
 
 By default, running the image will execute the `make run` command. To use with your own images, run the following:
