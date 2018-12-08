@@ -23,6 +23,21 @@ To convert all images from the `data/img/` folder to text using tesseract and pa
 make run
 ```
 
+### Docker
+
+A Dockerfile is available with all dependencies needed to run the program.  
+To build the image, run
+
+```
+make docker
+```
+
+By default, running the image will execute the `make run` command. To use with your own images, run the following:
+
+```
+docker run -v <path_to_input_images>:/usr/src/app/data/img mre0/receipt-parser
+```
+
 ## Future Plans
 
 The plan is to write the parsed receipt data into a CSV file. This is enough to create a graph with GnuPlot or any spreadsheet tool. If you want to get fancy, write an output for ElasticSearch and create a nice Kibana dashboard. I'm happy for any pull request.
