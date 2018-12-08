@@ -19,7 +19,7 @@
 import re
 from difflib import get_close_matches
 
-from objectview import ObjectView
+from parser.objectview import ObjectView
 
 class Receipt(object):
     """ Market receipt to be parsed """

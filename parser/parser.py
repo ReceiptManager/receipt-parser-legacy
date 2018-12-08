@@ -22,8 +22,8 @@ from collections import defaultdict
 
 import yaml
 
-from objectview import ObjectView
-from receipt import Receipt
+from parser.objectview import ObjectView
+from parser.receipt import Receipt
 
 BASE_PATH = os.getcwd()
 STATS_OUTPUT_FORMAT = "{0:10.0f},{1:d},{2:d},{3:d},{4:d},\n"
@@ -134,16 +134,3 @@ def ocr_receipts(config, receipt_files):
                 stats["sum"] += 1
     return stats
 
-
-def main():
-    """
-    :return:
-    """
-    config = read_config()
-    receipt_files = get_files_in_folder(config.receipts_path)
-    stats = ocr_receipts(config, receipt_files)
-    output_statistics(stats)
-
-
-if __name__ == "__main__":
-    main()
