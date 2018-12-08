@@ -4,11 +4,11 @@ install:
 
 .PHONY: parse
 parse:
-	pipenv run python $(PWD)/parser/parser.py
+	pipenv run python parser/parser.py
 
 .PHONY: import
 import:
-	pipenv run python $(PWD)/parser/importer.py
+	pipenv run python parser/importer.py
 
 .PHONY: run
 run: import parse
