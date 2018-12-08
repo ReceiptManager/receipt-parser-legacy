@@ -25,18 +25,17 @@ make run
 
 ### Docker
 
-A Dockerfile is available with all dependencies needed to run the program.
-
-First, replace `<image_tag>` with a name of your own then build the image:
+A Dockerfile is available with all dependencies needed to run the program.  
+To build the image, run
 
 ```
-docker build -t <image_tag> .
+make docker
 ```
 
 By default, running the image will execute the `make run` command. To use with your own images, run the following:
 
 ```
-docker run -v <path_to_input_images>:/usr/src/app/data/img <image_tag>
+docker run -v <path_to_input_images>:/usr/src/app/data/img mre0/receipt-parser
 ```
 
 ## Future Plans
