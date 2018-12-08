@@ -21,7 +21,7 @@ import os
 from PIL import Image
 from send2trash import send2trash
 
-BASE_PATH = os.path.dirname(os.getcwd())
+BASE_PATH = os.getcwd()
 INPUT_FOLDER = os.path.join(BASE_PATH, "data/img")
 TMP_FOLDER = os.path.join(BASE_PATH, "data/tmp")
 OUTPUT_FOLDER = os.path.join(BASE_PATH, "data/txt")

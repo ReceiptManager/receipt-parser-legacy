@@ -25,7 +25,7 @@ import yaml
 from parser.objectview import ObjectView
 from parser.receipt import Receipt
 
-BASE_PATH = os.path.dirname(os.getcwd())
+BASE_PATH = os.getcwd()
 STATS_OUTPUT_FORMAT = "{0:10.0f},{1:d},{2:d},{3:d},{4:d},\n"
 VERBOSE_OUTPUT_FORMAT = "Text, Market, Date, Sum"
 
@@ -122,7 +122,7 @@ def ocr_receipts(config, receipt_files):
     print(VERBOSE_OUTPUT_FORMAT)
     for receipt_path in receipt_files:
         with open(receipt_path) as receipt:
-            receipt = Receipt.Receipt(config, receipt.readlines())
+            receipt = Receipt(config, receipt.readlines())
             print(receipt_path, receipt.market, receipt.date, receipt.sum)
 
             stats["total"] += 1
@@ -134,16 +134,3 @@ def ocr_receipts(config, receipt_files):
                 stats["sum"] += 1
     return stats
 
-
-def main():
-    """
-    :return:
-    """
-    config = read_config()
-    receipt_files = get_files_in_folder(config.receipts_path)
-    stats = ocr_receipts(config, receipt_files)
-    output_statistics(stats)
-
-
-if __name__ == "__main__":
-    main()
