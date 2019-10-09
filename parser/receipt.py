@@ -16,6 +16,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+import dateutil.parser
 import re
 from difflib import get_close_matches
 
@@ -88,7 +89,11 @@ class Receipt(object):
         for line in self.lines:
             m = re.match(self.config.date_format, line)
             if m:  # We"re happy with the first match for now
-                return m.group(1)
+                # validate date using the dateutil library (https://dateutil.readthedocs.io/)
+                date_str = m.group(1)
+                dateutil.parser.parse(date_str)
+
+                return date_str
 
     def parse_market(self):
         """
