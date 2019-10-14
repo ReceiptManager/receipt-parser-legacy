@@ -84,7 +84,7 @@ class ReceiptTestCase(unittest.TestCase):
             dates like 19.08.15 and 19. 08. 2015
         """
 
-        ### test parse_date from file
+        # test parse_date from file
         receipt = None
         with open(self.dir_path + "/data/receipts/sample_text_receipt_dates.txt") as receipt_file:
             receipt = Receipt(self.config, receipt_file.readlines())
@@ -92,55 +92,56 @@ class ReceiptTestCase(unittest.TestCase):
         print(actual_date_str)
         self.assertEqual("19.08.15", actual_date_str)
 
-        ### test DD.MM.YY
+        # test DD.MM.YY
         receipt2 = Receipt(self.config, ["18.08.16\n", "19.09.17\n", "01.01.18"])
         actual_date_str = receipt2.parse_date()
         print(actual_date_str)
         self.assertEqual("18.08.16", actual_date_str)
 
-        ### test DD.MM.YYYY
+        # test DD.MM.YYYY
         receipt3 = Receipt(self.config, ["18.08.2016\n"])
         actual_date_str = receipt3.parse_date()
         print(actual_date_str)
         self.assertEqual("18.08.2016", actual_date_str)
 
-        ### HOWEVER these tests should fail:
-        ### test with DD > 31
-        receipt4 = Receipt(self.config, ["32.08.2016\n"])
-        actual_date_str = receipt4.parse_date()
-        print(actual_date_str)
-        # 32.08.2017 is invalid
-        #self.assertNotEqual("32.08.2016", actual_date_str)
-        #self.assertEqual(None, actual_date_str)
+        # HOWEVER these tests should fail:
+        # test with DD > 31
+        try:
+            receipt4 = Receipt(self.config, ["32.08.2016\n"])
+            actual_date_str = receipt4.parse_date()
+            print(actual_date_str)
+            self.fail("Invalid date should have raised an error")
+        except ValueError:
+            pass
 
-        ### test with MM > 12
-        receipt5 = Receipt(self.config, ["01.55.2016\n"])
-        actual_date_str = receipt5.parse_date()
-        print(actual_date_str)
-        # 01.55.2016 is invalid
-        #self.assertNotEquals("01.55.2016", actual_date_str)
-        #self.assertEqual(None, actual_date_str)
+        # test with MM > 12
+        try:
+            receipt5 = Receipt(self.config, ["01.55.2016\n"])
+            actual_date_str = receipt5.parse_date()
+            print(actual_date_str)
+            self.fail("Invalid date should have raised an error")
+        except ValueError:
+            pass
 
-        ### test with invalid date: 31.04.15
-        receipt6 = Receipt(self.config, ["31.04.15\n"])
-        actual_date_str = receipt6.parse_date()
-        print(actual_date_str)
-        # 31.04.15 is invalid
-        #self.assertNotEqual("31.04.15", actual_date_str)
-        #self.assertEqual(None, actual_date_str)
+        # test with invalid date: 31.04.15
+        try:
+            receipt6 = Receipt(self.config, ["31.04.15\n"])
+            actual_date_str = receipt6.parse_date()
+            print(actual_date_str)
+            self.fail("Invalid date should have raised an error")
+        except ValueError:
+            pass
 
-        ### And these tests should pass:
-        ### test with YYYY < 2013
+        # And these tests should pass:
+        # test with YYYY < 2013
         receipt7 = Receipt(self.config, ["18.08.2012\n"])
         actual_date_str = receipt7.parse_date()
         print(actual_date_str)
-        #self.assertEqual("18.08.2012", actual_date_str)
 
-        ### test with YYYY >= 2017
+        # test with YYYY >= 2017
         receipt8 = Receipt(self.config, ["18.08.2017\n"])
         actual_date_str = receipt8.parse_date()
         print(actual_date_str)
-        #self.assertEqual("18.08.2017", actual_date_str)
 
     def test_parse_market(self):
         """

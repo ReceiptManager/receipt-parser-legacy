@@ -8,5 +8,6 @@ pillow = "*"
 pyyaml = "*"
 "send2trash" = "*"
 pytest = "*"
+python-dateutil = "*"
 
 [dev-packages]
