@@ -6,6 +6,12 @@ receipts_path: "data/txt"
 # Market names roughly ordered by likelyhood.
 # Can contain market locations for fuzzy parsing
 markets:
+  Colruyt:
+     - colruyt
+     - Colruyt
+  Delhaize:
+     - Delhaize
+     - delhaize
   Penny:
      - penny
      - p e n n y
@@ -50,6 +56,7 @@ sum_keys:
   - sum
   - zwischensumme
   - bar
+  - te betalen
 
 sum_format: '\d+(\.\s?|,\s?|[^a-zA-Z\d])\d{2}'
 
