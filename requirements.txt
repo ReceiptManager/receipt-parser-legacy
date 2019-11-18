@@ -8,7 +8,7 @@ pillow==6.2.1
 pluggy==0.13.0
 py==1.8.0
 pyparsing==2.4.5
-pytest==5.2.3
+pytest==5.2.4
 python-dateutil==2.8.1
 pyyaml==5.1.2
 send2trash==1.5.0
