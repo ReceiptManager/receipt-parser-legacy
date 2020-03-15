@@ -12,3 +12,4 @@ stats.csv
 !img/IMG000*.jpg
 !txt/IMG000*.txt
 __pycache__/
+data/tmp

@@ -1,11 +1,8 @@
 FROM python:3
-
-RUN pip install -U pipenv
 RUN apt-get update && apt-get install -y tesseract-ocr-all 
-
-WORKDIR /usr/src/app
+RUN pip install poetry
+WORKDIR /app
 COPY . .
+RUN poetry install
 
-RUN make install
-
-CMD ["make", "run"]
+CMD ["poetry", "run"]

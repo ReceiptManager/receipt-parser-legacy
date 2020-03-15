@@ -17,12 +17,13 @@
 
 import os
 import unittest
-from parser.parser import read_config
+from parser.parse import read_config
 from parser.receipt import Receipt
 
 
 class ReceiptTestCase(unittest.TestCase):
     """Tests for `parser.py`."""
+
     dir_path = os.path.dirname(os.path.realpath(__file__))
     config = read_config(config=dir_path + "/data/config.yml")
 
@@ -31,7 +32,9 @@ class ReceiptTestCase(unittest.TestCase):
             verifies fuzzy_find
         """
         receipt = None
-        with open(self.dir_path + "/data/receipts/sample_text_fuzzy_find.txt") as receipt_file:
+        with open(
+            self.dir_path + "/data/receipts/sample_text_fuzzy_find.txt"
+        ) as receipt_file:
             receipt = Receipt(self.config, receipt_file.readlines())
         self.assertIsNotNone(receipt)
 
@@ -49,15 +52,19 @@ class ReceiptTestCase(unittest.TestCase):
             receipt = Receipt(self.config, receipt_file.readlines())
 
         # then updates the lines from the real receipt file
-        with open(self.dir_path + "/data/receipts/sample_text_receipt_to_normalize.txt") as receipt_file:
+        with open(
+            self.dir_path + "/data/receipts/sample_text_receipt_to_normalize.txt"
+        ) as receipt_file:
             receipt.lines = receipt_file.readlines()
 
-        expected_list = ["all upper case\n",
-                         "some upper case\n",
-                         "   white spaces\n",
-                         "    tab     tab whitespaces\n",
-                         "99.00\n",
-                         "trailing whitespaces after this line.\n"]
+        expected_list = [
+            "all upper case\n",
+            "some upper case\n",
+            "   white spaces\n",
+            "    tab     tab whitespaces\n",
+            "99.00\n",
+            "trailing whitespaces after this line.\n",
+        ]
 
         # make sure the Receipt is created
         self.assertIsNotNone(receipt)
@@ -73,7 +80,9 @@ class ReceiptTestCase(unittest.TestCase):
     def test_parse(self):
         # not sure there's a need to unit test this one since it essentially wraps other unit tests
         receipt = None
-        with open(self.dir_path + "/data/receipts/sample_text_receipt.txt") as receipt_file:
+        with open(
+            self.dir_path + "/data/receipts/sample_text_receipt.txt"
+        ) as receipt_file:
             receipt = Receipt(self.config, receipt_file.readlines())
 
         self.assertIsNotNone(receipt)
@@ -86,7 +95,9 @@ class ReceiptTestCase(unittest.TestCase):
 
         # test parse_date from file
         receipt = None
-        with open(self.dir_path + "/data/receipts/sample_text_receipt_dates.txt") as receipt_file:
+        with open(
+            self.dir_path + "/data/receipts/sample_text_receipt_dates.txt"
+        ) as receipt_file:
             receipt = Receipt(self.config, receipt_file.readlines())
         actual_date_str = receipt.date
         print(actual_date_str)
@@ -153,11 +164,11 @@ class ReceiptTestCase(unittest.TestCase):
 
         # should work but fails
         receipt = Receipt(self.config, ["p e n ny"])
-        #self.assertEqual("Penny", receipt.parse_market())
+        # self.assertEqual("Penny", receipt.parse_market())
 
         # should work but fails
         receipt = Receipt(self.config, ["m a r k t gmbh"])
-        #self.assertEqual("Penny", receipt.parse_market())
+        # self.assertEqual("Penny", receipt.parse_market())
 
         receipt = Receipt(self.config, ["rew"])
         self.assertEqual("REWE", receipt.parse_market())
@@ -203,7 +214,9 @@ class ReceiptTestCase(unittest.TestCase):
             Verifies parse_sum
         """
         receipt = None
-        with open(self.dir_path + "/data/receipts/sample_text_receipt.txt") as receipt_file:
+        with open(
+            self.dir_path + "/data/receipts/sample_text_receipt.txt"
+        ) as receipt_file:
             receipt = Receipt(self.config, receipt_file.readlines())
         self.assertIsNotNone(receipt)
         self.assertEqual("0.99", receipt.parse_sum())
@@ -239,5 +252,5 @@ class ReceiptTestCase(unittest.TestCase):
         self.assertEqual("1.99", receipt.parse_sum())
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()

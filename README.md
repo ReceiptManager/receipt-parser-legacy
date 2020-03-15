@@ -1,6 +1,10 @@
 # A fuzzy receipt parser written in Python  
 
 [![Build Status](https://travis-ci.org/mre/receipt-parser.svg?branch=master)](https://travis-ci.org/mre/receipt-parser)  
+
+**Note: While I will accept pull requests, I'm not planning to add any more
+functionality to this project myself.**
+
   
 Updating your housekeeping book is a tedious task: You need to manually find the shop name, the date and the total from every receipt. Then you need to write it down. At the end you want to calculate a sum of all bills. Nasty. So why not let a machine do it?
 
@@ -43,9 +47,3 @@ By default, running the image will execute the `make run` command. To use with y
 ```
 docker run -v <path_to_input_images>:/usr/src/app/data/img mre0/receipt-parser
 ```
-
-## Future Plans
-
-The plan is to write the parsed receipt data into a CSV file. This is enough to create a graph with GnuPlot or any spreadsheet tool. If you want to get fancy, write an output for ElasticSearch and create a nice Kibana dashboard. I'm happy for any pull request.
-
-
