@@ -19,7 +19,6 @@
 import os
 
 from PIL import Image
-from send2trash import send2trash
 
 BASE_PATH = os.getcwd()
 INPUT_FOLDER = os.path.join(BASE_PATH, "data/img")
@@ -131,9 +130,6 @@ def main():
 
         sharpen_image(input_path, tmp_path)
         run_tesseract(tmp_path, out_path)
-
-    print("Removing tmp folder")
-    send2trash(TMP_FOLDER)
 
 
 if __name__ == '__main__':

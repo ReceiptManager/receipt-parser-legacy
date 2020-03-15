@@ -1,14 +1,14 @@
 .PHONY: install
 install:
-	pipenv install
+	poetry install
 
 .PHONY: parse
 parse:
-	pipenv run python -m parser
+	poetry run
 
 .PHONY: import
 import:
-	pipenv run python parser/importer.py
+	poetry run python parser/importer.py
 
 .PHONY: run
 run: import parse
@@ -17,13 +17,17 @@ run: import parse
 docker-build:
 	docker build -t mre0/receipt-parser .	
 
+.PHONY: docker-push
+docker-push:
+	docker push mre0/receipt-parser
+
 .PHONY: docker-run
 docker-run:
-	docker run -v `pwd`/data/img:/usr/src/app/data/img mre0/receipt-parser
+	docker run -v `pwd`/data/img:/app/data/img mre0/receipt-parser
 
 .PHONY: test
 test:
-	pipenv run pytest
+	poetry run pytest 
 
 .PHONY: clean
 clean:
