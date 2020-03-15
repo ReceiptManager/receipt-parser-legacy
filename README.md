@@ -1,6 +1,6 @@
 # A fuzzy receipt parser written in Python  
 
-[![Build Status](https://travis-ci.org/mre/receipt-parser.svg?branch=master)](https://travis-ci.org/mre/receipt-parser)  
+![CI](https://github.com/mre/receipt-parser/workflows/CI/badge.svg)
 
 **Note: While I will accept pull requests, I'm not planning to add any more
 functionality to this project myself.**
