@@ -1,8 +1,14 @@
-# !/usr/bin/python3
+# Python3
 # coding: utf-8
 #
-# 
-#
+# Commit note of Daniela Grothe
+# This version uses pytesseract.
+# Only tested on Windows 8 with Python 3.8
+# and ImageMagick 6.8.8-10 Q8 x64
+# Seems as if either Win8-cmd or ImageMagick didn't want 
+# as many high-commas (didn't find my files, error msg such as:
+# "convert.exe: unable to open image `\Users\daniela\..."
+# ) so I removed some of them in the convert commands.
 # 
 #
 # Copyright 2015-2018
@@ -24,7 +30,7 @@ import os
 
 from PIL import Image
 
-BASE_PATH = ".\\"#os.getcwd()
+BASE_PATH = os.getcwd()
 INPUT_FOLDER = os.path.join(BASE_PATH, "data\\img")
 TMP_FOLDER = os.path.join(BASE_PATH, "data\\tmp")
 OUTPUT_FOLDER = os.path.join(BASE_PATH, "data\\txt")
@@ -83,9 +89,11 @@ def rotate_image(input_file, output_file, angle=90):
     :return: void
         Rotates image and saves result
     """
-    # ImageMagick 6.8.8-10 Q8 x64 doesn't want high-commas around the 90.
+    # 
     cmd = "convert" + " -rotate " + str(angle)
-    #cmd += " '" + input_file + "' '" + output_file + "'"
+    # errors on Windows:
+    # cmd += " '" + input_file + "' '" + output_file + "'"
+    # works on Windows:
     cmd += " " + input_file + " " + output_file
     print("Running", cmd)
     os.system(cmd)  # sharpen
@@ -154,8 +162,6 @@ def main():
             OUTPUT_FOLDER,
             image + ".out.txt"
         )
-        # I did ImageMagick manually here
-        # ScanTailor is also possible GUI workaround
         sharpen_image(input_path, tmp_path)
         run_tesseract(tmp_path, out_path)
 
