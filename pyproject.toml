@@ -12,7 +12,7 @@ python-dateutil = "^2.8.1"
 Pillow = "^7.1.2"
 
 [tool.poetry.dev-dependencies]
-pytest = "^5.4.2"
+pytest = "^5.4.3"
 black = {version = "^19.10b0", allow-prereleases = true}
 
 [tool.poetry.scripts]
