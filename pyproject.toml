@@ -13,7 +13,7 @@ Pillow = "^7.2.0"
 
 [tool.poetry.dev-dependencies]
 pytest = "^6.0.1"
-black = {version = "^20.8b0", allow-prereleases = true}
+black = {version = "^20.8b1", allow-prereleases = true}
 
 [tool.poetry.scripts]
 run = 'parser:main'
