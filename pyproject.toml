@@ -9,7 +9,7 @@ license = "Apache-2.0"
 python = "^3.6"
 pyyaml = "^5.3"
 python-dateutil = "^2.8.1"
-Pillow = "^8.0.0"
+Pillow = "^8.0.1"
 
 [tool.poetry.dev-dependencies]
 pytest = "^6.1.1"
