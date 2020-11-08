@@ -1,18 +1,16 @@
 # A fuzzy receipt parser written in Python  
 
 ![CI](https://github.com/mre/receipt-parser/workflows/CI/badge.svg)
-
-**Note: While I will accept pull requests, I'm not planning to add any more
-functionality to this project myself.**
-
   
-Updating your housekeeping book is a tedious task: You need to manually find the shop name, the date and the total from every receipt. Then you need to write it down. At the end you want to calculate a sum of all bills. Nasty. So why not let a machine do it?
+This is a fuzzy receipt parser written in Python. 
+It extracts information like the shop, the date, and the total form receipts.
+It can work as a standalone script or as part of the [IOS and Android application](https://github.com/ReceiptManager/Application).
 
-This is a fuzzy receipt parser written in Python. You give it any dirty old receipt lying around and it will try its best to find the correct data for you.
+## History
 
-It started as a hackathon project. Read more about it on the [trivago techblog](http://tech.trivago.com/2015/10/06/python_receipt_parser/).
+This project started as a hackathon idea. Read more about it on the [trivago techblog](http://tech.trivago.com/2015/10/06/python_receipt_parser/).
 Also read the comments on [HackerNews](https://news.ycombinator.com/item?id=10338199)
-Oh hey! And there's also a [talk online](https://www.youtube.com/watch?v=TuDeUsIlJz4) now if you're the visual kind of person.
+There's also a [talk](https://www.youtube.com/watch?v=TuDeUsIlJz4) about the project.
 
 ## Dependencies
 
