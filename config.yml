@@ -63,6 +63,6 @@ sum_keys:
 
 sum_format: '\d+(\.\s?|,\s?|[^a-zA-Z\d])\d{2}'
 
-# Matches dates like 19.08.15 and 19. 08. 2015
+# Matches dates like 19.08.15 and 19.08.2015
 date_format: '(?P<date>(\d{2,4}(\.\s?|[^a-zA-Z\d])\d{2}(\.\s?|[^a-zA-Z\d])(19|20)?\d\d)\s+)'
 
