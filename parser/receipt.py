@@ -1,4 +1,3 @@
-
 # !/usr/bin/python3
 # coding: utf-8
 
@@ -16,11 +15,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import dateutil.parser
 import re
 from difflib import get_close_matches
 
-from parser.objectview import ObjectView
+import dateutil.parser
+
 
 class Receipt(object):
     """ Market receipt to be parsed """
@@ -92,7 +91,10 @@ class Receipt(object):
                 # validate date using the dateutil library (https://dateutil.readthedocs.io/)
                 date_str = match.group(1)
                 date_str = date_str.replace(" ", "")
-                dateutil.parser.parse(date_str)
+                try:
+                    dateutil.parser.parse(date_str)
+                except ValueError:
+                    continue
 
                 return date_str
 
