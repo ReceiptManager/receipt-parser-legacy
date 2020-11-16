@@ -88,13 +88,13 @@ class Receipt(object):
         for line in self.lines:
             match = re.match(self.config.date_format, line)
             if match:  # We"re happy with the first match for now
-                # validate date using the dateutil library (https://dateutil.readthedocs.io/)
+                # validate date using the dateutil library (see: https://dateutil.readthedocs.io/)
                 date_str = match.group(1)
                 date_str = date_str.replace(" ", "")
                 try:
                     dateutil.parser.parse(date_str)
                 except ValueError:
-                    continue
+                    return ""
 
                 return date_str
 
