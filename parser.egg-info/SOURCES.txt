@@ -1,6 +1,7 @@
 README.md
 setup.py
 parser/__init__.py
+parser/config.py
 parser/importer.py
 parser/objectview.py
 parser/parse.py

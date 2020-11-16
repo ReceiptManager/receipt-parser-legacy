@@ -21,6 +21,8 @@ from PIL import Image
 from pytesseract import pytesseract
 from wand.image import Image as WandImage
 
+from parser.config import read_config
+
 BASE_PATH = os.getcwd()
 INPUT_FOLDER = os.path.join(BASE_PATH, "data/img")
 TMP_FOLDER = os.path.join(BASE_PATH, "data/tmp")
@@ -124,6 +126,10 @@ def run_tesseract(input_file, output_file, language="deu"):
 
 def main():
     prepare_folders()
+
+    dir_path = os.path.dirname(os.path.realpath(__file__))
+    config = read_config(config=dir_path + "/data/config.yml")
+
     images = list(find_images(INPUT_FOLDER))
     print("Found the following images in", INPUT_FOLDER)
     print(images)
@@ -143,7 +149,7 @@ def main():
         )
 
         sharpen_image(input_path, tmp_path)
-        run_tesseract(tmp_path, out_path)
+        run_tesseract(tmp_path, out_path, config.language)
 
 
 if __name__ == '__main__':
