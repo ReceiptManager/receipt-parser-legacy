@@ -93,7 +93,7 @@ def sharpen_image(input_file, output_file):
         img.auto_level()
         img.sharpen(radius=0, sigma=4.0)
         img.contrast()
-        img.save(output_file)
+        img.save(filename = output_file)
 
 
 def run_tesseract(input_file, output_file, language="deu"):
