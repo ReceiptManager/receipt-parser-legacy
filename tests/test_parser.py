@@ -17,7 +17,7 @@
 
 import os
 import unittest
-from parser.parse import read_config
+from parser.config import read_config
 from parser.receipt import Receipt
 
 
@@ -25,7 +25,7 @@ class ReceiptTestCase(unittest.TestCase):
     """Tests for `parser.py`."""
 
     dir_path = os.path.dirname(os.path.realpath(__file__))
-    config = read_config(config=dir_path + "/data/config.yml")
+    config = read_config(config=dir_path + "/config.yml")
 
     def test_fuzzy_find(self):
         """
