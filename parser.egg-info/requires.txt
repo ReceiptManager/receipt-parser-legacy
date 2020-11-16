@@ -1,3 +1,5 @@
 Pillow<9.0.0,>=8.0.1
+pytesseract<0.4.0,>=0.3.6
 python-dateutil<3.0.0,>=2.8.1
 pyyaml<6.0,>=5.3
+wand<0.7.0,>=0.6.3
