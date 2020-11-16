@@ -87,10 +87,10 @@ class Receipt(object):
         """
 
         for line in self.lines:
-            m = re.match(self.config.date_format, line)
-            if m:  # We"re happy with the first match for now
+            match = re.match(self.config.date_format, line)
+            if match:  # We"re happy with the first match for now
                 # validate date using the dateutil library (https://dateutil.readthedocs.io/)
-                date_str = m.group(1)
+                date_str = match.group(1)
                 date_str = date_str.replace(" ", "")
                 dateutil.parser.parse(date_str)
 
