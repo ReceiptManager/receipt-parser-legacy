@@ -19,7 +19,7 @@ import os
 import time
 from collections import defaultdict
 
-from parser.receipt import Receipt
+from receipt_parser.receipt import Receipt
 
 BASE_PATH = os.getcwd()
 STATS_OUTPUT_FORMAT = "{0:10.0f},{1:d},{2:d},{3:d},{4:d},\n"

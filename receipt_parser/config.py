@@ -1,6 +1,7 @@
 import yaml
 
-from parser.objectview import ObjectView
+from receipt_parser.objectview import ObjectView
+
 
 def read_config(config="config.yml"):
     """

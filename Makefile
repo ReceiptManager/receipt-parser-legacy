@@ -8,7 +8,7 @@ parse:
 
 .PHONY: import
 import:
-	poetry run python parser/importer.py
+	poetry run python receipt_parser/importer.py
 
 .PHONY: run
 run: import parse

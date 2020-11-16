@@ -17,12 +17,12 @@
 
 import os
 import unittest
-from parser.config import read_config
-from parser.receipt import Receipt
+from receipt_parser.config import read_config
+from receipt_parser.receipt import Receipt
 
 
 class ReceiptTestCase(unittest.TestCase):
-    """Tests for `parser.py`."""
+    """Tests for `receipt_parser.py`."""
 
     dir_path = os.path.dirname(os.path.realpath(__file__))
     config = read_config(config=dir_path + "/config.yml")
@@ -156,7 +156,7 @@ class ReceiptTestCase(unittest.TestCase):
 
     def test_parse_market(self):
         """
-            Verifies parser.parse_market
+            Verifies receipt_parser.parse_market
         """
         receipt = Receipt(self.config, ["penny"])
         print("market", receipt.parse_market())

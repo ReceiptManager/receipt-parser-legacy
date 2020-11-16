@@ -1,0 +1,14 @@
+README.md
+setup.py
+receipt_parser/__init__.py
+receipt_parser/config.py
+receipt_parser/importer.py
+receipt_parser/objectview.py
+receipt_parser/parse.py
+receipt_parser/receipt.py
+receipt_parser.egg-info/PKG-INFO
+receipt_parser.egg-info/SOURCES.txt
+receipt_parser.egg-info/dependency_links.txt
+receipt_parser.egg-info/entry_points.txt
+receipt_parser.egg-info/requires.txt
+receipt_parser.egg-info/top_level.txt
