@@ -94,7 +94,7 @@ class Receipt(object):
                 try:
                     dateutil.parser.parse(date_str)
                 except ValueError:
-                    return ""
+                    return None
 
                 return date_str
 
