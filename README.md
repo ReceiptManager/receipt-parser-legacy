@@ -12,11 +12,6 @@ This project started as a hackathon idea. Read more about it on the [trivago tec
 Also read the comments on [HackerNews](https://news.ycombinator.com/item?id=10338199)
 There's also a [talk](https://www.youtube.com/watch?v=TuDeUsIlJz4) about the project.
 
-## Dependencies
-
-* [Tesseract Open Source OCR Engine](https://github.com/tesseract-ocr/tesseract)
-* [ImageMagick](http://www.imagemagick.org/script/index.php)
-
 ## Usage
 
 To convert all images from the `data/img/` folder to text using tesseract and parse the resulting text files, run
