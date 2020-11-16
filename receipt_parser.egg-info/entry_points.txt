@@ -1,0 +1,3 @@
+[console_scripts]
+run = receipt_parser:main
+

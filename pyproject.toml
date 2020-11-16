@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "parser"
+name = "receipt_parser"
 version = "0.1.1"
 description = "A supermarket receipt parser written in Python using tesseract OCR"
 authors = ["Matthias Endler <matthias-endler@gmx.net>"]
@@ -18,7 +18,7 @@ pytest = "^6.1.2"
 black = {version = "^20.8b1", allow-prereleases = true}
 
 [tool.poetry.scripts]
-run = 'parser:main'
+run = 'receipt_parser:main'
 
 [build-system]
 requires = ["poetry>=0.12"]

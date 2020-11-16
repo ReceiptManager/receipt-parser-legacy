@@ -1,3 +1,4 @@
+from .config import read_config
 from .parse import *
 
 def main():
