@@ -14,8 +14,7 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-
+import io
 import os
 
 from PIL import Image
@@ -70,10 +69,12 @@ def rotate_image(input_file, output_file, angle=90):
     :return: void
         Rotates image and saves result
     """
-    print("Rotate image")
+    print("Rotate image: ", input_file, " ~> ", output_file)
     with WandImage(filename=input_file) as img:
-        img.rotate(angle)
-        img.save(filename=output_file)
+        with img.clone() as rotated:
+            rotated.rotate(angle)
+            rotated.save(filename=output_file)
+
 
 
 def sharpen_image(input_file, output_file):
@@ -88,11 +89,11 @@ def sharpen_image(input_file, output_file):
 
     rotate_image(input_file, output_file)  # rotate
     print("Increase image contrast and sharp image")
-    with WandImage(filename=input_file) as img:
+    with WandImage(filename=output_file) as img:
         img.auto_level()
         img.sharpen(radius=0, sigma=4.0)
         img.contrast()
-        img.save(filename = output_file)
+        img.save(filename=output_file)
 
 
 def run_tesseract(input_file, output_file, language="deu"):
@@ -106,8 +107,19 @@ def run_tesseract(input_file, output_file, language="deu"):
     """
 
     print("Parse image using pytesseract")
-    with Image.open(input_file) as img:
-        pytesseract.image_to_string(img, lang=language, timeout=60)
+    with io.BytesIO() as transfer:
+        with WandImage(filename=input_file) as img:
+            img.auto_level()
+            img.sharpen(radius=0, sigma=4.0)
+            img.contrast()
+            img.save(transfer)
+
+        with Image.open(transfer) as img:
+            image_data = pytesseract.image_to_string(img, lang=language, timeout=60)
+
+            out = open(output_file, "w")
+            out.write(image_data)
+            out.close()
 
 
 def main():
