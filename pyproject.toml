@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "parser"
-version = "0.1.0"
+version = "0.1.1"
 description = "A supermarket receipt parser written in Python using tesseract OCR"
 authors = ["Matthias Endler <matthias-endler@gmx.net>"]
 license = "Apache-2.0"
