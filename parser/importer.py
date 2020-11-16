@@ -70,11 +70,10 @@ def rotate_image(input_file, output_file, angle=90):
     :return: void
         Rotates image and saves result
     """
-
-    cmd = "convert -rotate " + "' " + str(angle) + "' "
-    cmd += "'" + input_file + "' '" + output_file + "'"
-    print("Running", cmd)
-    os.system(cmd)  # sharpen
+    print("Rotate image")
+    with WandImage(filename=input_file) as img:
+        img.rotate(angle)
+        img.save(filename=output_file)
 
 
 def sharpen_image(input_file, output_file):
@@ -88,7 +87,7 @@ def sharpen_image(input_file, output_file):
     """
 
     rotate_image(input_file, output_file)  # rotate
-    print("Running convert")
+    print("Increase image contrast and sharp image")
     with WandImage(filename=input_file) as img:
         img.auto_level()
         img.sharpen(radius=0, sigma=4.0)
@@ -106,7 +105,7 @@ def run_tesseract(input_file, output_file, language="deu"):
         Runs tesseract on image and saves result
     """
 
-    print("Running pytesseract")
+    print("Parse image using pytesseract")
     with Image.open(input_file) as img:
         pytesseract.image_to_string(img, lang=language, timeout=60)
 
