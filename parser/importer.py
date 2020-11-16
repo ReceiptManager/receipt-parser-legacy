@@ -19,6 +19,8 @@
 import os
 
 from PIL import Image
+from pytesseract import pytesseract
+from wand.image import Image as WandImage
 
 BASE_PATH = os.getcwd()
 INPUT_FOLDER = os.path.join(BASE_PATH, "data/img")
@@ -86,13 +88,15 @@ def sharpen_image(input_file, output_file):
     """
 
     rotate_image(input_file, output_file)  # rotate
-    cmd = "convert -auto-level -sharpen 0x4.0 -contrast "
-    cmd += "'" + output_file + "' '" + output_file + "'"
-    print("Running", cmd)
-    os.system(cmd)  # sharpen
+    print("Running convert")
+    with WandImage(filename=input_file) as img:
+        img.auto_level()
+        img.sharpen(radius=0, sigma=4.0)
+        img.contrast()
+        img.save(output_file)
 
 
-def run_tesseract(input_file, output_file):
+def run_tesseract(input_file, output_file, language="deu"):
     """
     :param input_file: str
         Path to image to OCR
@@ -102,10 +106,9 @@ def run_tesseract(input_file, output_file):
         Runs tesseract on image and saves result
     """
 
-    cmd = "tesseract -l deu "
-    cmd += "'" + input_file + "' '" + output_file + "'"
-    print("Running", cmd)
-    os.system(cmd)
+    print("Running pytesseract")
+    with Image.open(input_file) as img:
+        pytesseract.image_to_string(img, lang=language, timeout=60)
 
 
 def main():
