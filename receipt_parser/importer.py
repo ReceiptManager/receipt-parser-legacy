@@ -28,10 +28,8 @@ INPUT_FOLDER = os.path.join(BASE_PATH, "data/img")
 TMP_FOLDER = os.path.join(BASE_PATH, "data/tmp")
 OUTPUT_FOLDER = os.path.join(BASE_PATH, "data/txt")
 
-CLEAR_SCREEN = '\033[2J'
 ORANGE = '\033[33m'
 RESET = '\033[0m'
-
 
 def prepare_folders():
     """
@@ -154,7 +152,7 @@ def main():
         )
 
         if i != 1: print()
-        print(ORANGE + '~: ' + RESET + 'Process (' + str(i) + '/' + str(len(images)) + ') : ' + input_path + RESET)
+        print(ORANGE + '~: ' + RESET + 'Process (' + ORANGE + str(i) + '/' + str(len(images)) + RESET + ') : ' + input_path + RESET)
         sharpen_image(input_path, tmp_path)
         run_tesseract(tmp_path, out_path, config.language)
 

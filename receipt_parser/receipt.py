@@ -125,7 +125,7 @@ class Receipt(object):
                 for spelling in spellings:
                     line = self.fuzzy_find(spelling, accuracy)
                     if line:
-                        print(line, accuracy, market)
+                        #print(line, accuracy, market)
                         return market
 
     def parse_sum(self):
