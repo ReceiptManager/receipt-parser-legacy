@@ -61,7 +61,7 @@ class Receipt(object):
         self.market = self.parse_market()
         self.date = self.parse_date()
         self.sum = self.parse_sum()
-        self.article = self.parse_articles()
+        self.items = self.parse_items()
 
     def fuzzy_find(self, keyword, accuracy=0.6):
         """
@@ -100,7 +100,7 @@ class Receipt(object):
 
                 return date_str
 
-    def parse_articles(self):
+    def parse_items(self):
         item = namedtuple("item", ("article", "sum"))
         items = []
 

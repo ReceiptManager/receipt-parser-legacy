@@ -68,7 +68,7 @@ def output_statistics(stats, write_file="stats.csv"):
         time.time(), stats["total"], stats["market"], stats["date"],
         stats["sum"]
     )
-    #print(stats_str)
+    # print(stats_str)
 
     if write_file:
         with open(write_file, "a") as stats_file:
@@ -106,14 +106,20 @@ def ocr_receipts(config, receipt_files):
     stats = defaultdict(int)
 
     table_data = [
-        ['Path', 'Market', "Date", "SUM"],
+        ['Path', 'Market', "Date", "Items", "SUM"],
     ]
 
     for receipt_path in receipt_files:
         with open(receipt_path) as receipt:
             receipt = Receipt(config, receipt.readlines())
+
+            item_list = ""
+            for item in receipt.items:
+                if not item: continue
+                item_list += ' '.join(item) + "\n"
+
             table_data.append(
-                [receipt_path, receipt.market, receipt.date, receipt.sum]
+                [receipt_path, receipt.market, receipt.date, item_list, receipt.sum]
             )
 
             stats["total"] += 1
