@@ -3,6 +3,7 @@ txt_old
 preprocessed
 rotated
 img/*
+dist/*
 txt/*
 .idea
 *.pyc
