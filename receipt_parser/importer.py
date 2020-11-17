@@ -28,6 +28,10 @@ INPUT_FOLDER = os.path.join(BASE_PATH, "data/img")
 TMP_FOLDER = os.path.join(BASE_PATH, "data/tmp")
 OUTPUT_FOLDER = os.path.join(BASE_PATH, "data/txt")
 
+CLEAR_SCREEN = '\033[2J'
+ORANGE = '\033[33m'
+RESET = '\033[0m'
+
 
 def prepare_folders():
     """
@@ -71,8 +75,7 @@ def rotate_image(input_file, output_file, angle=90):
     :return: void
         Rotates image and saves result
     """
-    print("Rotate image: ", input_file, " ~> ", output_file)
-
+    print(ORANGE + '\t~: ' + RESET + 'Rotate image' + RESET)
     with WandImage(filename=input_file) as img:
         with img.clone() as rotated:
             rotated.rotate(angle)
@@ -90,7 +93,8 @@ def sharpen_image(input_file, output_file):
     """
 
     rotate_image(input_file, output_file)  # rotate
-    print("Increase image contrast and sharp image")
+    print(ORANGE + '\t~: ' + RESET + 'Increase image contrast and sharp image' + RESET)
+
     with WandImage(filename=output_file) as img:
         img.auto_level()
         img.sharpen(radius=0, sigma=4.0)
@@ -108,7 +112,7 @@ def run_tesseract(input_file, output_file, language="deu"):
         Runs tesseract on image and saves result
     """
 
-    print("Parse image using pytesseract")
+    print(ORANGE + '\t~: ' + RESET + 'Parse image using pytesseract' + RESET)
     with io.BytesIO() as transfer:
         with WandImage(filename=input_file) as img:
             img.auto_level()
@@ -131,9 +135,10 @@ def main():
     config = read_config(config=dir_path + "/config.yml")
 
     images = list(find_images(INPUT_FOLDER))
-    print("Found the following images in", INPUT_FOLDER)
-    print(images)
+    print(ORANGE + '~: ' + RESET + 'Found: ' + ORANGE + str(len(images)),
+          RESET + ' images in: ' + ORANGE + INPUT_FOLDER + RESET)
 
+    i = 1
     for image in images:
         input_path = os.path.join(
             INPUT_FOLDER,
@@ -148,8 +153,12 @@ def main():
             image + ".out.txt"
         )
 
+        if i != 1: print()
+        print(ORANGE + '~: ' + RESET + 'Process (' + str(i) + '/' + str(len(images)) + ') : ' + input_path + RESET)
         sharpen_image(input_path, tmp_path)
         run_tesseract(tmp_path, out_path, config.language)
+
+        i = i + 1
 
 
 if __name__ == '__main__':
