@@ -19,6 +19,7 @@ import re
 from difflib import get_close_matches
 
 import dateutil.parser
+from numpy.random._common import namedtuple
 
 
 class Receipt(object):
@@ -60,6 +61,7 @@ class Receipt(object):
         self.market = self.parse_market()
         self.date = self.parse_date()
         self.sum = self.parse_sum()
+        self.article = self.parse_articles()
 
     def fuzzy_find(self, keyword, accuracy=0.6):
         """
@@ -97,6 +99,18 @@ class Receipt(object):
                     return None
 
                 return date_str
+
+    def parse_articles(self):
+        item = namedtuple("item", ("article", "sum"))
+        items = []
+
+        for line in self.lines:
+
+            match = re.search(r"(...+)\s(-|)(\d,\d\d)\s", line)
+            if hasattr(match, 'group'):
+                items.append(item(match.group(1), match.group(3).replace(",", ".")))
+
+        return items
 
     def parse_market(self):
         """

@@ -112,5 +112,6 @@ def ocr_receipts(config, receipt_files):
                 stats["date"] += 1
             if receipt.sum:
                 stats["sum"] += 1
+
     return stats
 
