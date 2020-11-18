@@ -122,7 +122,7 @@ def run_tesseract(input_file, output_file, language="deu"):
             img.save(transfer)
 
         with Image.open(transfer) as img:
-            image_data = pytesseract.image_to_string(img, lang=language,config=r'--psm 4', timeout=60)
+            image_data = pytesseract.image_to_string(img, lang=language, config=r'--psm 4', timeout=60)
 
             out = open(output_file, "w")
             out.write(image_data)
@@ -136,8 +136,8 @@ def rescale_image(img):
 
 
 def erode(image):
-    kernel = np.ones((5,5),np.uint8)
-    return cv2.erode(image, kernel, iterations = 1)
+    kernel = np.ones((5, 5), np.uint8)
+    return cv2.erode(image, kernel, iterations=1)
 
 
 def grayscale_image(img):
@@ -151,8 +151,24 @@ def opening(image):
     kernel = np.ones((5, 5), np.uint8)
     return cv2.morphologyEx(image, cv2.MORPH_OPEN, kernel)
 
-def remove_noise(image):
-    return cv2.medianBlur(image,5)
+
+def remove_noise(img):
+    kernel = np.ones((1, 1), np.uint8)
+    img = cv2.dilate(img, kernel, iterations=1)
+    img = cv2.erode(img, kernel, iterations=1)
+
+    print("\t[TASK]: Applying blur to the image")
+    img = cv2.threshold(cv2.GaussianBlur(img, (5, 5), 0), 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)[1]
+    img = cv2.threshold(cv2.bilateralFilter(img, 5, 75, 75), 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)[1]
+    img = cv2.threshold(cv2.medianBlur(img, 3), 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)[1]
+    img = cv2.adaptiveThreshold(cv2.GaussianBlur(img, (5, 5), 0), 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C,
+                                cv2.THRESH_BINARY,
+                                31, 2)
+    img = cv2.adaptiveThreshold(cv2.bilateralFilter(img, 9, 75, 75), 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C,
+                                cv2.THRESH_BINARY, 31, 2)
+    img = cv2.adaptiveThreshold(cv2.medianBlur(img, 3), 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY, 31,
+                                2)
+    return img
 
 
 def deskew(image):
@@ -198,8 +214,7 @@ def main():
         img = cv2.imread(input_path)
         img = rescale_image(img)
         img = grayscale_image(img)
-        img = remove_noise(img)
-
+        # img = remove_noise(img)
         # img = deskew(img)
         cv2.imwrite(tmp_path, img)
 
