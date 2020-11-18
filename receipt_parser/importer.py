@@ -17,6 +17,8 @@
 import io
 import os
 
+import cv2
+import numpy as np
 from PIL import Image
 from pytesseract import pytesseract
 from wand.image import Image as WandImage
@@ -30,6 +32,7 @@ OUTPUT_FOLDER = os.path.join(BASE_PATH, "data/txt")
 
 ORANGE = '\033[33m'
 RESET = '\033[0m'
+
 
 def prepare_folders():
     """
@@ -119,11 +122,48 @@ def run_tesseract(input_file, output_file, language="deu"):
             img.save(transfer)
 
         with Image.open(transfer) as img:
-            image_data = pytesseract.image_to_string(img, lang=language, timeout=60)
+            image_data = pytesseract.image_to_string(img, lang=language,config=r'--psm 4', timeout=60)
 
             out = open(output_file, "w")
             out.write(image_data)
             out.close()
+
+
+def rescale_image(img):
+    print(ORANGE + '\t~: ' + RESET + 'Rescale image' + RESET)
+    img = cv2.resize(img, None, fx=1.2, fy=1.2, interpolation=cv2.INTER_CUBIC)
+    return img
+
+
+def erode(image):
+    kernel = np.ones((5,5),np.uint8)
+    return cv2.erode(image, kernel, iterations = 1)
+
+
+def grayscale_image(img):
+    print(ORANGE + '\t~: ' + RESET + 'Grayscale image' + RESET)
+    img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+    return img
+
+
+def opening(image):
+    print(ORANGE + '\t~: ' + RESET + 'Perform morphological transformation' + RESET)
+    kernel = np.ones((5, 5), np.uint8)
+    return cv2.morphologyEx(image, cv2.MORPH_OPEN, kernel)
+
+def remove_noise(image):
+    return cv2.medianBlur(image,5)
+
+
+def deskew(image):
+    coords = np.column_stack(np.where(image > 0))
+    angle = cv2.minAreaRect(coords)[-1]
+
+    (h, w) = image.shape[:2]
+    center = (w // 2, h // 2)
+    M = cv2.getRotationMatrix2D(center, angle, 1.0)
+    rotated = cv2.warpAffine(image, M, (w, h), flags=cv2.INTER_CUBIC, borderMode=cv2.BORDER_REPLICATE)
+    return rotated
 
 
 def main():
@@ -152,8 +192,18 @@ def main():
         )
 
         if i != 1: print()
-        print(ORANGE + '~: ' + RESET + 'Process (' + ORANGE + str(i) + '/' + str(len(images)) + RESET + ') : ' + input_path + RESET)
-        sharpen_image(input_path, tmp_path)
+        print(ORANGE + '~: ' + RESET + 'Process (' + ORANGE + str(i) + '/' + str(
+            len(images)) + RESET + ') : ' + input_path + RESET)
+
+        img = cv2.imread(input_path)
+        img = rescale_image(img)
+        img = grayscale_image(img)
+        img = remove_noise(img)
+
+        # img = deskew(img)
+        cv2.imwrite(tmp_path, img)
+
+        sharpen_image(tmp_path, tmp_path)
         run_tesseract(tmp_path, out_path, config.language)
 
         i = i + 1
