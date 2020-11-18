@@ -14,7 +14,7 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
+import fnmatch
 import re
 from difflib import get_close_matches
 
@@ -34,7 +34,7 @@ class Receipt(object):
         """
 
         self.config = config
-        self.market = self.date = self.sum = None
+        self.market = self.date = self.sum = self.items = None
         self.lines = raw
         self.normalize()
         self.parse()
@@ -101,14 +101,21 @@ class Receipt(object):
                 return date_str
 
     def parse_items(self):
-        item = namedtuple("item", ("article", "sum"))
         items = []
+        item = namedtuple("item", ("article", "sum"))
 
         for line in self.lines:
-
             match = re.search(r"(...+)\s(-|)(\d,\d\d)\s", line)
             if hasattr(match, 'group'):
-                items.append(item(match.group(1), match.group(3).replace(",", ".")))
+                article_name = match.group(1)
+            else:
+                continue
+
+            for word in self.config.sum_keys:
+                parse_stop = fnmatch.fnmatch(article_name, f"{word}*")
+                if parse_stop: return items
+
+            items.append(item(match.group(1), match.group(3).replace(",", ".")))
 
         return items
 
@@ -125,7 +132,7 @@ class Receipt(object):
                 for spelling in spellings:
                     line = self.fuzzy_find(spelling, accuracy)
                     if line:
-                        #print(line, accuracy, market)
+                        # print(line, accuracy, market)
                         return market
 
     def parse_sum(self):
