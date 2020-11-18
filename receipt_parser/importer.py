@@ -208,7 +208,7 @@ def main():
         )
 
         if i != 1: print()
-        print(ORANGE + '~: ' + RESET + 'Process (' + ORANGE + str(i) + '/' + str(
+        print(ORANGE + '~: ' + RESET + 'Process image (' + ORANGE + str(i) + '/' + str(
             len(images)) + RESET + ') : ' + input_path + RESET)
 
         img = cv2.imread(input_path)
