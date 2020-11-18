@@ -122,7 +122,7 @@ def run_tesseract(input_file, output_file, language="deu"):
             img.save(transfer)
 
         with Image.open(transfer) as img:
-            image_data = pytesseract.image_to_string(img, lang=language, config=r'--psm 4', timeout=60)
+            image_data = pytesseract.image_to_string(img, lang=language, config=r'--psm 6', timeout=60)
 
             out = open(output_file, "w")
             out.write(image_data)
