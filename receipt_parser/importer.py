@@ -157,29 +157,25 @@ def remove_noise(img):
     img = cv2.dilate(img, kernel, iterations=1)
     img = cv2.erode(img, kernel, iterations=1)
 
-    print("\t[TASK]: Applying blur to the image")
+    print(ORANGE + '\t~: ' + RESET + 'Applying gaussianBlur and medianBlur' + RESET)
+
     img = cv2.threshold(cv2.GaussianBlur(img, (5, 5), 0), 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)[1]
     img = cv2.threshold(cv2.bilateralFilter(img, 5, 75, 75), 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)[1]
-    img = cv2.threshold(cv2.medianBlur(img, 3), 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)[1]
-    img = cv2.adaptiveThreshold(cv2.GaussianBlur(img, (5, 5), 0), 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C,
-                                cv2.THRESH_BINARY,
-                                31, 2)
     img = cv2.adaptiveThreshold(cv2.bilateralFilter(img, 9, 75, 75), 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C,
-                                cv2.THRESH_BINARY, 31, 2)
-    img = cv2.adaptiveThreshold(cv2.medianBlur(img, 3), 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY, 31,
-                                2)
+                            cv2.THRESH_BINARY, 31, 2)
     return img
 
 
 def deskew(image):
     coords = np.column_stack(np.where(image > 0))
     angle = cv2.minAreaRect(coords)[-1]
+    print(ORANGE + '\t~: ' + RESET + 'Get rotation angle:' + str(angle) + RESET)
 
-    (h, w) = image.shape[:2]
-    center = (w // 2, h // 2)
-    M = cv2.getRotationMatrix2D(center, angle, 1.0)
-    rotated = cv2.warpAffine(image, M, (w, h), flags=cv2.INTER_CUBIC, borderMode=cv2.BORDER_REPLICATE)
-    return rotated
+    # (h, w) = image.shape[:2]
+    # center = (w // 2, h // 2)
+    # M = cv2.getRotationMatrix2D(center, angle, 1.0)
+    # rotated = cv2.warpAffine(image, M, (w, h), flags=cv2.INTER_CUBIC, borderMode=cv2.BORDER_REPLICATE)
+    return image
 
 
 def main():
@@ -214,8 +210,8 @@ def main():
         img = cv2.imread(input_path)
         img = rescale_image(img)
         img = grayscale_image(img)
-        # img = remove_noise(img)
-        # img = deskew(img)
+        img = remove_noise(img)
+        img = deskew(img)
         cv2.imwrite(tmp_path, img)
 
         sharpen_image(tmp_path, tmp_path)
