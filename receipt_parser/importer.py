@@ -23,7 +23,7 @@ from PIL import Image
 from pytesseract import pytesseract
 from wand.image import Image as WandImage
 
-from receipt_parser.config import read_config
+from config import read_config
 
 BASE_PATH = os.getcwd()
 INPUT_FOLDER = os.path.join(BASE_PATH, "data/img")
@@ -91,7 +91,7 @@ def rotate_image(input_file, output_file, angle):
             rotated.save(filename=output_file)
 
 
-def sharpen_image(input_file, output_file, angle):
+def sharpen_image(input_file, output_file):
     """
     :param input_file: str
         Path to image to prettify
@@ -101,7 +101,6 @@ def sharpen_image(input_file, output_file, angle):
         Prettifies image and saves result
     """
 
-    rotate_image(input_file, output_file, angle)  # rotate
     print(ORANGE + '\t~: ' + RESET + 'Increase image contrast and sharp image' + RESET)
 
     with WandImage(filename=output_file) as img:
@@ -224,10 +223,11 @@ def main():
         img = rescale_image(img)
         img = grayscale_image(img)
         img = remove_noise(img)
-        img = deskew(img)
-        cv2.imwrite(tmp_path, img[0])
+        [img, angle] = deskew(img)
+        cv2.imwrite(tmp_path, img)
 
-        sharpen_image(tmp_path, tmp_path, img[1])
+        rotate_image(tmp_path, tmp_path, angle)
+        sharpen_image(tmp_path, tmp_path)
         run_tesseract(tmp_path, out_path, config.language)
 
         i = i + 1
