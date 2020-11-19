@@ -224,6 +224,9 @@ env.bak/
 venv.bak/
 pythonenv*
 
+#Ignore logs
+*.log
+
 # Spyder project settings
 .spyderproject
 .spyproject
