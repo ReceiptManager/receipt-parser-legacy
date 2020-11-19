@@ -1,6 +1,6 @@
 Metadata-Version: 1.2
 Name: receipt-parser
-Version: 0.1.1
+Version: 0.1.2
 Summary: A supermarket receipt parser written in Python using tesseract OCR
 Home-page: UNKNOWN
 Author: Matthias Endler

@@ -2,7 +2,7 @@ README.md
 setup.py
 receipt_parser/__init__.py
 receipt_parser/config.py
-receipt_parser/importer.py
+receipt_parser/enhancer.py
 receipt_parser/objectview.py
 receipt_parser/parse.py
 receipt_parser/receipt.py

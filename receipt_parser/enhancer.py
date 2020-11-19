@@ -23,6 +23,7 @@ from PIL import Image
 from pytesseract import pytesseract
 from wand.image import Image as WandImage
 
+from receipt_parser import Receipt
 from receipt_parser.config import read_config
 
 BASE_PATH = os.getcwd()
@@ -151,7 +152,7 @@ def remove_noise(img):
     img = cv2.threshold(cv2.GaussianBlur(img, (5, 5), 0), 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)[1]
     img = cv2.threshold(cv2.bilateralFilter(img, 5, 75, 75), 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)[1]
     img = cv2.adaptiveThreshold(cv2.bilateralFilter(img, 9, 75, 75), 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C,
-                            cv2.THRESH_BINARY, 31, 2)
+                                cv2.THRESH_BINARY, 31, 2)
     return img
 
 
@@ -160,6 +161,37 @@ def detect_orientation(image):
     angle = cv2.minAreaRect(coords)[-1]
     print(ORANGE + '\t~: ' + RESET + 'Get rotation angle:' + str(angle) + RESET)
     return image
+
+
+def process_receipt(config, input_path, output_path):
+    prepare_folders()
+
+    print(ORANGE + '~: ' + RESET + 'Process image: ' + ORANGE + input_path + RESET)
+    img = cv2.imread(input_path)
+    img = rescale_image(img)
+
+    img = grayscale_image(img)
+    img = remove_noise(img)
+    img = detect_orientation(img)
+
+    if not img: return None
+
+    tmp_path = os.path.join(
+        TMP_FOLDER,
+        img
+    )
+
+    out_path = os.path.join(
+        output_path,
+        img + ".txt"
+    )
+
+    cv2.imwrite(tmp_path, img)
+    sharpen_image(tmp_path, tmp_path)
+    run_tesseract(tmp_path, out_path, config.language)
+    raw = open(out_path, 'r').read()
+
+    return Receipt(config=config, raw=raw)
 
 
 def main():
@@ -184,7 +216,7 @@ def main():
         )
         out_path = os.path.join(
             OUTPUT_FOLDER,
-            image + ".out.txt"
+            image + ".txt"
         )
 
         if i != 1: print()
