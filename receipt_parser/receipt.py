@@ -34,7 +34,10 @@ class Receipt(object):
         """
 
         self.config = config
-        self.market = self.date = self.sum = self.items = None
+        self.market = None
+        self.date = None
+        self.sum = None
+        self.items = None
         self.lines = raw
         self.normalize()
         self.parse()
