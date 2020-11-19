@@ -115,6 +115,9 @@ def run_tesseract(input_file, output_file, language="deu"):
     """
 
     print(ORANGE + '\t~: ' + RESET + 'Parse image using pytesseract' + RESET)
+    print(ORANGE + '\t~: ' + RESET + 'Parse image at: ' + input_file + RESET)
+    print(ORANGE + '\t~: ' + RESET + 'Write result to: ' + output_file + RESET)
+
     with io.BytesIO() as transfer:
         with WandImage(filename=input_file) as img:
             img.auto_level()
@@ -163,33 +166,41 @@ def detect_orientation(image):
     return image
 
 
-def process_receipt(config, input_path, output_path):
-    prepare_folders()
-
-    print(ORANGE + '~: ' + RESET + 'Process image: ' + ORANGE + input_path + RESET)
-    img = cv2.imread(input_path)
+def enhance_image(img):
     img = rescale_image(img)
-
     img = grayscale_image(img)
     img = remove_noise(img)
     img = detect_orientation(img)
+    return img
 
-    if not img: return None
 
+def process_receipt(config, filename):
+    input_path = INPUT_FOLDER + "/" + filename
+
+    output_path = OUTPUT_FOLDER + "/" + filename.split(".")[0] + ".txt"
+
+    print(ORANGE + '~: ' + RESET + 'Process image: ' + ORANGE + input_path + RESET)
+    prepare_folders()
+
+    try:
+        img = cv2.imread(input_path)
+    except FileNotFoundError:
+        return Receipt(config=config, raw="")
+
+    img = enhance_image(img)
     tmp_path = os.path.join(
-        TMP_FOLDER,
-        img
+        TMP_FOLDER, filename
     )
 
-    out_path = os.path.join(
-        output_path,
-        img + ".txt"
-    )
+    print(ORANGE + '~: ' + RESET + 'Temporary store image at: ' + ORANGE + tmp_path + RESET)
 
     cv2.imwrite(tmp_path, img)
+
     sharpen_image(tmp_path, tmp_path)
-    run_tesseract(tmp_path, out_path, config.language)
-    raw = open(out_path, 'r').read()
+    run_tesseract(tmp_path, output_path, config.language)
+
+    print(ORANGE + '~: ' + RESET + 'Store parsed text at: ' + ORANGE + output_path + RESET)
+    raw = open(output_path, 'r').read()
 
     return Receipt(config=config, raw=raw)
 
@@ -214,6 +225,7 @@ def main():
             TMP_FOLDER,
             image
         )
+
         out_path = os.path.join(
             OUTPUT_FOLDER,
             image + ".txt"
@@ -224,10 +236,7 @@ def main():
             len(images)) + RESET + ') : ' + input_path + RESET)
 
         img = cv2.imread(input_path)
-        img = rescale_image(img)
-        img = grayscale_image(img)
-        img = remove_noise(img)
-        img = detect_orientation(img)
+        img = enhance_image(img)
         cv2.imwrite(tmp_path, img)
 
         sharpen_image(tmp_path, tmp_path)
