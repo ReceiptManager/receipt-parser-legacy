@@ -135,21 +135,10 @@ def rescale_image(img):
     return img
 
 
-def erode(image):
-    kernel = np.ones((5, 5), np.uint8)
-    return cv2.erode(image, kernel, iterations=1)
-
-
 def grayscale_image(img):
     print(ORANGE + '\t~: ' + RESET + 'Grayscale image' + RESET)
     img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
     return img
-
-
-def opening(image):
-    print(ORANGE + '\t~: ' + RESET + 'Perform morphological transformation' + RESET)
-    kernel = np.ones((5, 5), np.uint8)
-    return cv2.morphologyEx(image, cv2.MORPH_OPEN, kernel)
 
 
 def remove_noise(img):
@@ -166,15 +155,10 @@ def remove_noise(img):
     return img
 
 
-def deskew(image):
+def detect_orientation(image):
     coords = np.column_stack(np.where(image > 0))
     angle = cv2.minAreaRect(coords)[-1]
     print(ORANGE + '\t~: ' + RESET + 'Get rotation angle:' + str(angle) + RESET)
-
-    # (h, w) = image.shape[:2]
-    # center = (w // 2, h // 2)
-    # M = cv2.getRotationMatrix2D(center, angle, 1.0)
-    # rotated = cv2.warpAffine(image, M, (w, h), flags=cv2.INTER_CUBIC, borderMode=cv2.BORDER_REPLICATE)
     return image
 
 
@@ -211,7 +195,7 @@ def main():
         img = rescale_image(img)
         img = grayscale_image(img)
         img = remove_noise(img)
-        img = deskew(img)
+        img = detect_orientation(img)
         cv2.imwrite(tmp_path, img)
 
         sharpen_image(tmp_path, tmp_path)
