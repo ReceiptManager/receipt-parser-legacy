@@ -23,7 +23,7 @@ from PIL import Image
 from pytesseract import pytesseract
 from wand.image import Image as WandImage
 
-from config import read_config
+from receipt_parser.config import read_config
 
 BASE_PATH = os.getcwd()
 INPUT_FOLDER = os.path.join(BASE_PATH, "data/img")
