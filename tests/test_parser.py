@@ -17,7 +17,9 @@
 
 import os
 import unittest
+
 from receipt_parser.config import read_config
+from receipt_parser.enhancer import prepare_folders, process_receipt
 from receipt_parser.receipt import Receipt
 
 
@@ -33,7 +35,7 @@ class ReceiptTestCase(unittest.TestCase):
         """
         receipt = None
         with open(
-            self.dir_path  + "/tests/data/receipts/sample_text_fuzzy_find.txt"
+                self.dir_path + "/tests/data/receipts/sample_text_fuzzy_find.txt"
         ) as receipt_file:
             receipt = Receipt(self.config, receipt_file.readlines())
         self.assertIsNotNone(receipt)
@@ -53,7 +55,7 @@ class ReceiptTestCase(unittest.TestCase):
 
         # then updates the lines from the real receipt file
         with open(
-            self.dir_path + "/tests/data/receipts/sample_text_receipt_to_normalize.txt"
+                self.dir_path + "/tests/data/receipts/sample_text_receipt_to_normalize.txt"
         ) as receipt_file:
             receipt.lines = receipt_file.readlines()
 
@@ -81,7 +83,7 @@ class ReceiptTestCase(unittest.TestCase):
         # not sure there's a need to unit test this one since it essentially wraps other unit tests
         receipt = None
         with open(
-            self.dir_path + "/tests/data/receipts/sample_text_receipt.txt"
+                self.dir_path + "/tests/data/receipts/sample_text_receipt.txt"
         ) as receipt_file:
             receipt = Receipt(self.config, receipt_file.readlines())
 
@@ -96,7 +98,7 @@ class ReceiptTestCase(unittest.TestCase):
         # test parse_date from file
         receipt = None
         with open(
-            self.dir_path + "/tests/data/receipts/sample_text_receipt_dates.txt"
+                self.dir_path + "/tests/data/receipts/sample_text_receipt_dates.txt"
         ) as receipt_file:
             receipt = Receipt(self.config, receipt_file.readlines())
         actual_date_str = receipt.date
@@ -204,7 +206,7 @@ class ReceiptTestCase(unittest.TestCase):
         """
         receipt = None
         with open(
-            self.dir_path + "/tests/data/receipts/sample_text_receipt.txt"
+                self.dir_path + "/tests/data/receipts/sample_text_receipt.txt"
         ) as receipt_file:
             receipt = Receipt(self.config, receipt_file.readlines())
         self.assertIsNotNone(receipt)
@@ -240,6 +242,14 @@ class ReceiptTestCase(unittest.TestCase):
         receipt = Receipt(self.config, ["bar 1,99\n"])
         self.assertEqual("1.99", receipt.parse_sum())
 
+    def test_image(self):
+        prepare_folders()
+
+        dir_path = os.getcwd()
+        config = read_config(config=dir_path + "/config.yml")
+        r = process_receipt(config, "IMG0001.jpg")
+
+        self.assertEqual("4.99", r.sum)
 
 if __name__ == "__main__":
     unittest.main()
