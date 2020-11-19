@@ -1,4 +1,3 @@
-
 # !/usr/bin/python3
 # coding: utf-8
 
@@ -15,12 +14,13 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-import dateutil.parser
+import fnmatch
 import re
 from difflib import get_close_matches
 
-from parser.objectview import ObjectView
+import dateutil.parser
+from numpy.random._common import namedtuple
+
 
 class Receipt(object):
     """ Market receipt to be parsed """
@@ -34,7 +34,7 @@ class Receipt(object):
         """
 
         self.config = config
-        self.market = self.date = self.sum = None
+        self.market = self.date = self.sum = self.items = None
         self.lines = raw
         self.normalize()
         self.parse()
@@ -61,6 +61,7 @@ class Receipt(object):
         self.market = self.parse_market()
         self.date = self.parse_date()
         self.sum = self.parse_sum()
+        self.items = self.parse_items()
 
     def fuzzy_find(self, keyword, accuracy=0.6):
         """
@@ -87,14 +88,40 @@ class Receipt(object):
         """
 
         for line in self.lines:
-            m = re.match(self.config.date_format, line)
-            if m:  # We"re happy with the first match for now
-                # validate date using the dateutil library (https://dateutil.readthedocs.io/)
-                date_str = m.group(1)
+            match = re.match(self.config.date_format, line)
+            if match:  # We"re happy with the first match for now
+                # validate date using the dateutil library (see: https://dateutil.readthedocs.io/)
+                date_str = match.group(1)
                 date_str = date_str.replace(" ", "")
-                dateutil.parser.parse(date_str)
+                try:
+                    dateutil.parser.parse(date_str)
+                except ValueError:
+                    return None
 
                 return date_str
+
+    def parse_items(self):
+        items = []
+        item = namedtuple("item", ("article", "sum"))
+
+        for line in self.lines:
+            match = re.search(self.config.item_format, line)
+            if hasattr(match, 'group'):
+                article_name = match.group(1)
+            else:
+                continue
+
+            ignored_words = self.config.sum_keys
+            for word in self.config.ignore_keys:
+                ignored_words.append(word)
+
+            for word in ignored_words:
+                parse_stop = fnmatch.fnmatch(article_name, f"{word}*")
+                if parse_stop: return items
+
+            items.append(item(match.group(1), match.group(3).replace(",", ".")))
+
+        return items
 
     def parse_market(self):
         """
@@ -109,7 +136,7 @@ class Receipt(object):
                 for spelling in spellings:
                     line = self.fuzzy_find(spelling, accuracy)
                     if line:
-                        print(line, accuracy, market)
+                        # print(line, accuracy, market)
                         return market
 
     def parse_sum(self):

@@ -17,15 +17,15 @@
 
 import os
 import unittest
-from parser.parse import read_config
-from parser.receipt import Receipt
+from receipt_parser.config import read_config
+from receipt_parser.receipt import Receipt
 
 
 class ReceiptTestCase(unittest.TestCase):
-    """Tests for `parser.py`."""
+    """Tests for `receipt_parser.py`."""
 
-    dir_path = os.path.dirname(os.path.realpath(__file__))
-    config = read_config(config=dir_path + "/data/config.yml")
+    dir_path = os.getcwd()
+    config = read_config(dir_path + "/config.yml")
 
     def test_fuzzy_find(self):
         """
@@ -33,7 +33,7 @@ class ReceiptTestCase(unittest.TestCase):
         """
         receipt = None
         with open(
-            self.dir_path + "/data/receipts/sample_text_fuzzy_find.txt"
+            self.dir_path  + "/tests/data/receipts/sample_text_fuzzy_find.txt"
         ) as receipt_file:
             receipt = Receipt(self.config, receipt_file.readlines())
         self.assertIsNotNone(receipt)
@@ -48,12 +48,12 @@ class ReceiptTestCase(unittest.TestCase):
         receipt = None
         # unfortunately, the Receipt constructor calls 'normalize'
         # so we can construct a Receipt object with a blank receipt file
-        with open(self.dir_path + "/data/receipts/empty_file.txt") as receipt_file:
+        with open(self.dir_path + "/tests/data/receipts/empty_file.txt") as receipt_file:
             receipt = Receipt(self.config, receipt_file.readlines())
 
         # then updates the lines from the real receipt file
         with open(
-            self.dir_path + "/data/receipts/sample_text_receipt_to_normalize.txt"
+            self.dir_path + "/tests/data/receipts/sample_text_receipt_to_normalize.txt"
         ) as receipt_file:
             receipt.lines = receipt_file.readlines()
 
@@ -81,7 +81,7 @@ class ReceiptTestCase(unittest.TestCase):
         # not sure there's a need to unit test this one since it essentially wraps other unit tests
         receipt = None
         with open(
-            self.dir_path + "/data/receipts/sample_text_receipt.txt"
+            self.dir_path + "/tests/data/receipts/sample_text_receipt.txt"
         ) as receipt_file:
             receipt = Receipt(self.config, receipt_file.readlines())
 
@@ -96,52 +96,41 @@ class ReceiptTestCase(unittest.TestCase):
         # test parse_date from file
         receipt = None
         with open(
-            self.dir_path + "/data/receipts/sample_text_receipt_dates.txt"
+            self.dir_path + "/tests/data/receipts/sample_text_receipt_dates.txt"
         ) as receipt_file:
             receipt = Receipt(self.config, receipt_file.readlines())
         actual_date_str = receipt.date
         print(actual_date_str)
-        self.assertEqual("19.08.15", actual_date_str)
+        self.assertEqual("19.08.15\n", actual_date_str)
 
         # test DD.MM.YY
         receipt2 = Receipt(self.config, ["18.08.16\n", "19.09.17\n", "01.01.18"])
         actual_date_str = receipt2.parse_date()
         print(actual_date_str)
-        self.assertEqual("18.08.16", actual_date_str)
+        self.assertEqual("18.08.16\n", actual_date_str)
 
         # test DD.MM.YYYY
         receipt3 = Receipt(self.config, ["18.08.2016\n"])
         actual_date_str = receipt3.parse_date()
         print(actual_date_str)
-        self.assertEqual("18.08.2016", actual_date_str)
+        self.assertEqual("18.08.2016\n", actual_date_str)
 
         # HOWEVER these tests should fail:
         # test with DD > 31
-        try:
-            receipt4 = Receipt(self.config, ["32.08.2016\n"])
-            actual_date_str = receipt4.parse_date()
-            print(actual_date_str)
-            self.fail("Invalid date should have raised an error")
-        except ValueError:
-            pass
+        receipt4 = Receipt(self.config, ["32.08.2016\n"])
+        actual_date_str = receipt4.parse_date()
+        self.assertIsNone(actual_date_str)
 
         # test with MM > 12
-        try:
-            receipt5 = Receipt(self.config, ["01.55.2016\n"])
-            actual_date_str = receipt5.parse_date()
-            print(actual_date_str)
-            self.fail("Invalid date should have raised an error")
-        except ValueError:
-            pass
+        receipt5 = Receipt(self.config, ["01.55.2016\n"])
+        actual_date_str = receipt5.parse_date()
+        print(actual_date_str)
+        self.assertIsNone(actual_date_str)
 
         # test with invalid date: 31.04.15
-        try:
-            receipt6 = Receipt(self.config, ["31.04.15\n"])
-            actual_date_str = receipt6.parse_date()
-            print(actual_date_str)
-            self.fail("Invalid date should have raised an error")
-        except ValueError:
-            pass
+        receipt6 = Receipt(self.config, ["31.04.15\n"])
+        actual_date_str = receipt6.parse_date()
+        self.assertIsNone(actual_date_str)
 
         # And these tests should pass:
         # test with YYYY < 2013
@@ -156,7 +145,7 @@ class ReceiptTestCase(unittest.TestCase):
 
     def test_parse_market(self):
         """
-            Verifies parser.parse_market
+            Verifies receipt_parser.parse_market
         """
         receipt = Receipt(self.config, ["penny"])
         print("market", receipt.parse_market())
@@ -215,7 +204,7 @@ class ReceiptTestCase(unittest.TestCase):
         """
         receipt = None
         with open(
-            self.dir_path + "/data/receipts/sample_text_receipt.txt"
+            self.dir_path + "/tests/data/receipts/sample_text_receipt.txt"
         ) as receipt_file:
             receipt = Receipt(self.config, receipt_file.readlines())
         self.assertIsNotNone(receipt)

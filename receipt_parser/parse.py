@@ -19,29 +19,15 @@ import os
 import time
 from collections import defaultdict
 
-import yaml
+from terminaltables import SingleTable
 
-from parser.objectview import ObjectView
-from parser.receipt import Receipt
+from receipt_parser.receipt import Receipt
 
 BASE_PATH = os.getcwd()
+ORANGE = '\033[33m'
+RESET = '\033[0m'
+
 STATS_OUTPUT_FORMAT = "{0:10.0f},{1:d},{2:d},{3:d},{4:d},\n"
-VERBOSE_OUTPUT_FORMAT = "Text, Market, Date, Sum"
-
-
-def read_config(config="config.yml"):
-    """
-    :param file: str
-        Name of file to read
-    :return: ObjectView
-        Parsed config file
-    """
-    with open(config, 'r') as stream:
-        try:
-            docs = yaml.safe_load(stream)
-            return ObjectView(docs)
-        except yaml.YAMLError as e:
-            print(e)
 
 
 def get_files_in_folder(folder, include_hidden=False):
@@ -54,7 +40,7 @@ def get_files_in_folder(folder, include_hidden=False):
         List of full path of files in folder
     """
 
-    files = os.listdir(os.path.join(BASE_PATH,folder))  # list content of folder
+    files = os.listdir(os.path.join(BASE_PATH, folder))  # list content of folder
     if not include_hidden:  # avoid files starting with "."
         files = [
             f for f in files if not f.startswith(".")
@@ -82,7 +68,7 @@ def output_statistics(stats, write_file="stats.csv"):
         time.time(), stats["total"], stats["market"], stats["date"],
         stats["sum"]
     )
-    print(stats_str)
+    # print(stats_str)
 
     if write_file:
         with open(write_file, "a") as stats_file:
@@ -118,11 +104,23 @@ def ocr_receipts(config, receipt_files):
     """
 
     stats = defaultdict(int)
-    print(VERBOSE_OUTPUT_FORMAT)
+
+    table_data = [
+        ['Path', 'Market', "Date", "Items", "SUM"],
+    ]
+
     for receipt_path in receipt_files:
         with open(receipt_path) as receipt:
             receipt = Receipt(config, receipt.readlines())
-            print(receipt_path, receipt.market, receipt.date, receipt.sum)
+
+            item_list = ""
+            for item in receipt.items:
+                if not item: continue
+                item_list += ' '.join(item) + "\n"
+
+            table_data.append(
+                [receipt_path, receipt.market, receipt.date, item_list, receipt.sum]
+            )
 
             stats["total"] += 1
             if receipt.market:
@@ -131,5 +129,8 @@ def ocr_receipts(config, receipt_files):
                 stats["date"] += 1
             if receipt.sum:
                 stats["sum"] += 1
-    return stats
 
+    table = SingleTable(table_data)
+    print(table.table)
+
+    return stats
