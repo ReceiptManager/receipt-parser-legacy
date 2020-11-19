@@ -65,7 +65,7 @@ def find_images(folder):
                 pass
 
 
-def rotate_image(input_file, output_file, angle=90):
+def rotate_image(input_file, output_file, angle):
     """
     :param input_file: str
         Path to image to rotate
@@ -76,6 +76,14 @@ def rotate_image(input_file, output_file, angle=90):
     :return: void
         Rotates image and saves result
     """
+
+    if (angle == 0):
+        return None
+    elif (angle == -90):
+        angle = 90
+    elif (angle == 90):
+        angle = -90
+
     print(ORANGE + '\t~: ' + RESET + 'Rotate image' + RESET)
     with WandImage(filename=input_file) as img:
         with img.clone() as rotated:
@@ -83,7 +91,7 @@ def rotate_image(input_file, output_file, angle=90):
             rotated.save(filename=output_file)
 
 
-def sharpen_image(input_file, output_file):
+def sharpen_image(input_file, output_file, angle):
     """
     :param input_file: str
         Path to image to prettify
@@ -93,7 +101,7 @@ def sharpen_image(input_file, output_file):
         Prettifies image and saves result
     """
 
-    rotate_image(input_file, output_file)  # rotate
+    rotate_image(input_file, output_file, angle)  # rotate
     print(ORANGE + '\t~: ' + RESET + 'Increase image contrast and sharp image' + RESET)
 
     with WandImage(filename=output_file) as img:
@@ -167,15 +175,20 @@ def remove_noise(img):
 
 
 def deskew(image):
+    output = []
     coords = np.column_stack(np.where(image > 0))
     angle = cv2.minAreaRect(coords)[-1]
+
     print(ORANGE + '\t~: ' + RESET + 'Get rotation angle:' + str(angle) + RESET)
 
     # (h, w) = image.shape[:2]
     # center = (w // 2, h // 2)
     # M = cv2.getRotationMatrix2D(center, angle, 1.0)
     # rotated = cv2.warpAffine(image, M, (w, h), flags=cv2.INTER_CUBIC, borderMode=cv2.BORDER_REPLICATE)
-    return image
+
+    output = [image, int(angle)]
+
+    return output
 
 
 def main():
@@ -212,9 +225,9 @@ def main():
         img = grayscale_image(img)
         img = remove_noise(img)
         img = deskew(img)
-        cv2.imwrite(tmp_path, img)
+        cv2.imwrite(tmp_path, img[0])
 
-        sharpen_image(tmp_path, tmp_path)
+        sharpen_image(tmp_path, tmp_path, img[1])
         run_tesseract(tmp_path, out_path, config.language)
 
         i = i + 1
