@@ -108,6 +108,11 @@ class Receipt(object):
             match = re.search(self.config.item_format, line)
             if hasattr(match, 'group'):
                 article_name = match.group(1)
+
+                if (match.group(2) == "-"):
+                    article_sum = "-" + match.group(3).replace(",", ".")
+                else:
+                    article_sum = match.group(3).replace(",", ".")
             else:
                 continue
 
@@ -116,10 +121,10 @@ class Receipt(object):
                 ignored_words.append(word)
 
             for word in ignored_words:
-                parse_stop = fnmatch.fnmatch(article_name, f"{word}*")
+                parse_stop = fnmatch.fnmatch(article_name, f"*{word}*")
                 if parse_stop: return items
 
-            items.append(item(match.group(1), match.group(3).replace(",", ".")))
+            items.append(item(article_name, article_sum))
 
         return items
 
