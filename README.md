@@ -11,9 +11,9 @@ It can work as a standalone script or as part of the [IOS and Android applicatio
 This project started as a hackathon idea. Read more about it on the [trivago techblog](http://tech.trivago.com/2015/10/06/python_receipt_parser2/).
 Also read the comments on [HackerNews](https://news.ycombinator.com/item?id=10338199)
 There's also a [talk](https://www.youtube.com/watch?v=TuDeUsIlJz4) about the project.
+The library is now available at [PyPi](https://pypi.org/project/receipt-parser2/#description).
 
 ## Usage
-
 To convert all images from the `data/img/` folder to text using tesseract and parse the resulting text files, run
 
 ```
