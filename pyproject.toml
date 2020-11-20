@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "receipt_parser"
+name = "receipt_parser2"
 version = "0.1.3"
 description = "A supermarket receipt parser written in Python using tesseract OCR"
 authors = ["Matthias Endler <matthias-endler@gmx.net>"]
@@ -16,16 +16,12 @@ terminaltables = "^3.1.0"
 numpy = "^1.19.4"
 opencv-python = "^4.4.0"
 
-readme = 'README.md'
-repository = "https://www.github.com/ReceiptManager/Parser"
-homepage = "https://www.github.com/ReceiptManager/Parser"
-
 [tool.poetry.dev-dependencies]
 pytest = "^6.1.2"
 black = {version = "^20.8b1", allow-prereleases = true}
 
 [tool.poetry.scripts]
-run = 'receipt_parser:main'
+run = 'receipt_parser2:main'
 
 [build-system]
 requires = ["poetry>=0.12"]
