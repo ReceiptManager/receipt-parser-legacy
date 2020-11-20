@@ -8,22 +8,22 @@ parse:
 
 .PHONY: import
 import:
-	poetry run python receipt_parser2/enhancer.py
+	poetry run python receipt_parser_core/enhancer.py
 
 .PHONY: run
 run: import parse
 
 .PHONY: docker-build
 docker-build:
-	docker build -t mre0/receipt_parser2 .
+	docker build -t mre0/receipt_parser .
 
 .PHONY: docker-push
 docker-push:
-	docker push mre0/receipt_parser2
+	docker push mre0/receipt_parser
 
 .PHONY: docker-run
 docker-run:
-	docker run -v `pwd`/data/img:/app/data/img mre0/receipt_parser2
+	docker run -v `pwd`/data/img:/app/data/img mre0/receipt_parser
 
 .PHONY: test
 test:

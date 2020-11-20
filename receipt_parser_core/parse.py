@@ -21,7 +21,7 @@ from collections import defaultdict
 
 from terminaltables import SingleTable
 
-from receipt_parser2.receipt import Receipt
+from receipt_parser_core.receipt import Receipt
 
 BASE_PATH = os.getcwd()
 ORANGE = '\033[33m'
