@@ -6,7 +6,7 @@ It can work as a standalone script or as part of the [IOS and Android applicatio
 
 ## History
 
-This project started as a hackathon idea. Read more about it on the [trivago techblog](http://tech.trivago.com/2015/10/06/python_receipt_parser_core/).
+This project started as a hackathon idea. Read more about it on the [trivago techblog](https://tech.trivago.com/2015/10/06/python_receipt_parser/).
 Also read the comments on [HackerNews](https://news.ycombinator.com/item?id=10338199)
 There's also a [talk](https://www.youtube.com/watch?v=TuDeUsIlJz4) about the project.
 The library is now available at [PyPi](https://pypi.org/project/receipt-parser-core/#description).
@@ -36,5 +36,5 @@ make docker-run
 By default, running the image will execute the `make run` command. To use with your own images, run the following:
 
 ```
-docker run -v <path_to_input_images>:/usr/src/app/data/img mre0/receipt_parser_core
+docker run -v <path_to_input_images>:/usr/src/app/data/img mre0/receipt_parser
 ```
