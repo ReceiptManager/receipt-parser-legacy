@@ -1,6 +1,6 @@
 # A fuzzy receipt parser written in Python  
 
-![CI](https://github.com/mre/receipt-parser/workflows/CI/badge.svg)
+![CI](https://github.com/mre/receipt_parser2/workflows/CI/badge.svg)
   
 This is a fuzzy receipt parser written in Python. 
 It extracts information like the shop, the date, and the total form receipts.
@@ -8,7 +8,7 @@ It can work as a standalone script or as part of the [IOS and Android applicatio
 
 ## History
 
-This project started as a hackathon idea. Read more about it on the [trivago techblog](http://tech.trivago.com/2015/10/06/python_receipt_parser/).
+This project started as a hackathon idea. Read more about it on the [trivago techblog](http://tech.trivago.com/2015/10/06/python_receipt_parser2/).
 Also read the comments on [HackerNews](https://news.ycombinator.com/item?id=10338199)
 There's also a [talk](https://www.youtube.com/watch?v=TuDeUsIlJz4) about the project.
 
@@ -38,5 +38,5 @@ make docker-run
 By default, running the image will execute the `make run` command. To use with your own images, run the following:
 
 ```
-docker run -v <path_to_input_images>:/usr/src/app/data/img mre0/receipt-parser
+docker run -v <path_to_input_images>:/usr/src/app/data/img mre0/receipt_parser2
 ```
