@@ -11,6 +11,10 @@ Also read the comments on [HackerNews](https://news.ycombinator.com/item?id=1033
 There's also a [talk](https://www.youtube.com/watch?v=TuDeUsIlJz4) about the project.
 The library is now available at [PyPi](https://pypi.org/project/receipt-parser-core/#description).
 
+## Dependencies
+The `receipt-parser-core` library depend on `imagemagick`. Please install `imagemagick`
+with your favorite package manager.
+
 ## Usage
 To convert all images from the `data/img/` folder to text using tesseract and parse the resulting text files, run
 
