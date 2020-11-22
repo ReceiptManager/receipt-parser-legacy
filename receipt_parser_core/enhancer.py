@@ -79,6 +79,10 @@ def rotate_image(input_file, output_file, angle=90):
     """
     print(ORANGE + '\t~: ' + RESET + 'Rotate image' + RESET)
     with WandImage(filename=input_file) as img:
+        height, width = img.shape
+        if width < height:
+            angle = 0
+
         with img.clone() as rotated:
             rotated.rotate(angle)
             rotated.save(filename=output_file)
@@ -163,14 +167,14 @@ def detect_orientation(image):
     coords = np.column_stack(np.where(image > 0))
     angle = cv2.minAreaRect(coords)[-1]
     print(ORANGE + '\t~: ' + RESET + 'Get rotation angle:' + str(angle) + RESET)
-    return image
 
+    return image
 
 def enhance_image(img):
     img = rescale_image(img)
     img = grayscale_image(img)
     img = remove_noise(img)
-    img = detect_orientation(img)
+    # img = detect_orientation(img)
     return img
 
 
