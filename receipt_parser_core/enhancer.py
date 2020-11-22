@@ -77,12 +77,12 @@ def rotate_image(input_file, output_file, angle=90):
     :return: void
         Rotates image and saves result
     """
-    print(ORANGE + '\t~: ' + RESET + 'Rotate image' + RESET)
     with WandImage(filename=input_file) as img:
-        height, width = img.shape
+        width, height = img.size
         if width < height:
             angle = 0
 
+        print(ORANGE + '\t~: ' + RESET + 'Rotate image by: ' + str(angle) + "°" + RESET)
         with img.clone() as rotated:
             rotated.rotate(angle)
             rotated.save(filename=output_file)
