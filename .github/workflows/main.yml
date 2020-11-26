@@ -24,3 +24,8 @@ jobs:
         python_version: 3.8.0
         poetry_version: 1.0.5
         args: run python -m pytest
+
+ macos:
+    runs-on: ubuntu-20.04
+    steps:
+      - run: apt-get install -y imagemagick tesseract-ocr-all 
