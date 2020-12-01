@@ -204,7 +204,7 @@ def process_receipt(config, filename):
     run_tesseract(tmp_path, output_path, config.language)
 
     print(ORANGE + '~: ' + RESET + 'Store parsed text at: ' + ORANGE + output_path + RESET)
-    raw = open(output_path, 'r').read()
+    raw = open(output_path, 'r').readlines()
 
     return Receipt(config=config, raw=raw)
 
