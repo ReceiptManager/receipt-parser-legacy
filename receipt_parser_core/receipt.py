@@ -52,7 +52,7 @@ class Receipt(object):
         """
 
         self.lines = [
-            line.lower() for line in self.lines if line.strip()
+            line.lower() for line in self.lines.splitlines() if line.strip()
         ]
 
     def parse(self):
