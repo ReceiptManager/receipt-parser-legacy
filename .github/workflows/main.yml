@@ -12,7 +12,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
-    - run: sudo apt-get install -y libmagickwand-dev tesseract-ocr-all imagemagick
+    - run: sudo apt-get install -y libmagickwand-dev tesseract-ocr-all imagemagick python-wand
     - name: Install
       uses: abatilo/actions-poetry@v1.5.0
       with:
