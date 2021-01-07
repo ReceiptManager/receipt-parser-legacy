@@ -19,7 +19,7 @@ import re
 from difflib import get_close_matches
 
 import dateutil.parser
-from numpy.random._common import namedtuple
+from collections import namedtuple
 
 
 class Receipt(object):
