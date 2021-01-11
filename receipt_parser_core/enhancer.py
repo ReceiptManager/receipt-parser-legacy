@@ -88,7 +88,7 @@ def rotate_image(input_file, output_file, angle=90):
             rotated.save(filename=output_file)
 
 
-def sharpen_image(input_file, output_file):
+def sharpen_image(input_file, output_file, rotate=True):
     """
     :param input_file: str
         Path to image to prettify
@@ -98,7 +98,9 @@ def sharpen_image(input_file, output_file):
         Prettifies image and saves result
     """
 
-    rotate_image(input_file, output_file)  # rotate
+    if rotate:
+        rotate_image(input_file, output_file)
+
     print(ORANGE + '\t~: ' + RESET + 'Increase image contrast and sharp image' + RESET)
 
     with WandImage(filename=output_file) as img:
@@ -170,15 +172,21 @@ def detect_orientation(image):
 
     return image
 
-def enhance_image(img):
+
+def enhance_image(img, high_contrast=True, gaussian_blur=True):
     img = rescale_image(img)
-    img = grayscale_image(img)
-    img = remove_noise(img)
+
+    if high_contrast:
+        img = grayscale_image(img)
+
+    if gaussian_blur:
+        img = remove_noise(img)
+
     # img = detect_orientation(img)
     return img
 
 
-def process_receipt(config, filename):
+def process_receipt(config, filename, rotate=True, grayscale=True, gaussian_blur=True):
     input_path = INPUT_FOLDER + "/" + filename
 
     output_path = OUTPUT_FOLDER + "/" + filename.split(".")[0] + ".txt"
@@ -191,7 +199,7 @@ def process_receipt(config, filename):
     except FileNotFoundError:
         return Receipt(config=config, raw="")
 
-    img = enhance_image(img)
+    img = enhance_image(img, grayscale, gaussian_blur)
     tmp_path = os.path.join(
         TMP_FOLDER, filename
     )
@@ -200,7 +208,7 @@ def process_receipt(config, filename):
 
     cv2.imwrite(tmp_path, img)
 
-    sharpen_image(tmp_path, tmp_path)
+    sharpen_image(tmp_path, tmp_path, rotate)
     run_tesseract(tmp_path, output_path, config.language)
 
     print(ORANGE + '~: ' + RESET + 'Store parsed text at: ' + ORANGE + output_path + RESET)
