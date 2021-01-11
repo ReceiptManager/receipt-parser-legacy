@@ -247,7 +247,7 @@ class ReceiptTestCase(unittest.TestCase):
 
         dir_path = os.getcwd()
         config = read_config(config=dir_path + "/config.yml")
-        r = process_receipt(config, "IMG0001.jpg")
+        r = process_receipt(config, "IMG0001.jpg", gaussian_blur=True,grayscale=True)
 
         self.assertEqual("4.99", r.sum)
 
