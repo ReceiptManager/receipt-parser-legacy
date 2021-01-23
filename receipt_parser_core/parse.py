@@ -110,7 +110,7 @@ def ocr_receipts(config, receipt_files):
     ]
 
     for receipt_path in receipt_files:
-        with open(receipt_path) as receipt:
+        with open(receipt_path, encoding="utf8", errors='ignore') as receipt:
             receipt = Receipt(config, receipt.readlines())
 
             item_list = ""
