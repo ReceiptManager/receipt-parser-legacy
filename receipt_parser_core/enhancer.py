@@ -182,7 +182,6 @@ def enhance_image(img, high_contrast=True, gaussian_blur=True):
     if gaussian_blur:
         img = remove_noise(img)
 
-    # img = detect_orientation(img)
     return img
 
 
