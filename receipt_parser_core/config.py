@@ -10,7 +10,7 @@ def read_config(config="config.yml"):
     :return: ObjectView
         Parsed config file
     """
-    with open(config, 'r') as stream:
+    with open(config, 'rb') as stream:
         try:
             docs = yaml.safe_load(stream)
             return ObjectView(docs)
