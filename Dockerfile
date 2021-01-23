@@ -1,5 +1,5 @@
 FROM python:3
-RUN apt-get update && apt-get install -y tesseract-ocr-all imagemagick
+RUN apt-get update && apt-get install -y tesseract-ocr-all imagemagick ffmpeg libsm6 libxext6
 RUN pip install poetry
 WORKDIR /app
 COPY . .
@@ -10,4 +10,4 @@ RUN mkdir -p /app/data/txt
 
 RUN poetry install
 
-CMD ["poetry", "run"]
+CMD ["make", "run"]
