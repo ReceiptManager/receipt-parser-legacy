@@ -18,6 +18,7 @@
 import os
 import time
 from collections import defaultdict
+import json
 
 from terminaltables import SingleTable
 
@@ -109,6 +110,9 @@ def ocr_receipts(config, receipt_files):
         ['Path', 'Market', "Date", "Items", "SUM"],
     ]
 
+    if config.results_as_json:
+        results_to_json(config, receipt_files)
+
     for receipt_path in receipt_files:
         with open(receipt_path, encoding="utf8", errors='ignore') as receipt:
             receipt = Receipt(config, receipt.readlines())
@@ -134,3 +138,12 @@ def ocr_receipts(config, receipt_files):
     print(table.table)
 
     return stats
+
+
+def results_to_json(config, receipt_files):
+    for receipt_path in receipt_files:
+        with open(receipt_path, encoding="utf8", errors='ignore') as receipt:
+            receipt = Receipt(config, receipt.readlines())
+            out = open(receipt_path + ".json", "w")
+            out.write(receipt.to_json())
+            out.close()
