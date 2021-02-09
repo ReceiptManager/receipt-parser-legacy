@@ -6,6 +6,8 @@ language: deu
 # Receipts should be simple text files
 receipts_path: "data/txt"
 
+results_as_json: true
+
 # Market names roughly ordered by likelihood.
 # Can contain market locations for fuzzy parsing
 markets:

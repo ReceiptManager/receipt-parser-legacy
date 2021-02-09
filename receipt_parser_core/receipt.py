@@ -20,6 +20,7 @@ from difflib import get_close_matches
 
 import dateutil.parser
 from collections import namedtuple
+import json
 
 
 class Receipt(object):
@@ -163,3 +164,18 @@ class Receipt(object):
                 sum_float = re.search(self.config.sum_format, sum_line)
                 if sum_float:
                     return sum_float.group(0)
+
+
+    def to_json(self):
+        """
+        :return: json
+            Convert Receipt object to json
+        """
+        object_data = {
+            "market": self.market,
+            "date": self.date,
+            "sum": self.sum,
+            "items": self.items,
+            "lines": self.lines
+        }
+        return json.dumps(object_data)
