@@ -126,7 +126,7 @@ class Receipt(object):
 
             for word in ignored_words:
                 parse_stop = fnmatch.fnmatch(article_name, f"*{word}*")
-                if parse_stop: return items
+                if parse_stop: continue
 
             items.append(item(article_name, article_sum))
 
