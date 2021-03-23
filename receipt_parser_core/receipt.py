@@ -92,7 +92,7 @@ class Receipt(object):
         """
 
         for line in self.lines:
-            match = re.match(self.config.date_format, line)
+            match = re.search(self.config.date_format, line)
             if match:  # We"re happy with the first match for now
                 # validate date using the dateutil library (see: https://dateutil.readthedocs.io/)
                 date_str = match.group(1)
@@ -111,7 +111,7 @@ class Receipt(object):
         for line in self.lines:
             match = re.search(self.config.item_format, line)
             if hasattr(match, 'group'):
-                article_name = match.group(1)
+                article_name = match.group(1).replace('"',"")
 
                 if (match.group(2) == "-"):
                     article_sum = "-" + match.group(3).replace(",", ".")
