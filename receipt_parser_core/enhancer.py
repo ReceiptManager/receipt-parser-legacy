@@ -126,9 +126,6 @@ def run_tesseract(input_file, output_file, language="deu"):
 
     with io.BytesIO() as transfer:
         with WandImage(filename=input_file) as img:
-            img.auto_level()
-            img.sharpen(radius=0, sigma=4.0)
-            img.contrast()
             img.save(transfer)
 
         with Image.open(transfer) as img:
