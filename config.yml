@@ -76,5 +76,5 @@ sum_format: '\d+(\.\s?|,\s?|[^a-zA-Z\d])\d{2}'
 item_format: '(...+)\s(-|)(\d,\d\d)\s'
 
 # Matches dates like 19.08.15 and 19.08.2015
-date_format: '(?P<date>(\d{2,4}(\.\s?|[^a-zA-Z\d])\d{2}(\.\s?|[^a-zA-Z\d])(19|20)?\d\d)\s+)'
+date_format: '(\d{2}\.\d{2}\.\d{2,4})'
 
