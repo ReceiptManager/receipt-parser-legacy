@@ -108,10 +108,14 @@ class Receipt(object):
         items = []
         item = namedtuple("item", ("article", "sum"))
 
+        ignored_words = self.config.sum_keys
+        for word in self.config.ignore_keys:
+            ignored_words.append(word)
+
         for line in self.lines:
             match = re.search(self.config.item_format, line)
             if hasattr(match, 'group'):
-                article_name = match.group(1).replace('"',"")
+                article_name = match.group(1)
 
                 if (match.group(2) == "-"):
                     article_sum = "-" + match.group(3).replace(",", ".")
@@ -120,15 +124,13 @@ class Receipt(object):
             else:
                 continue
 
-            ignored_words = self.config.sum_keys
-            for word in self.config.ignore_keys:
-                ignored_words.append(word)
+            if (len(article_name) > 3):
+                for word in ignored_words:
+                    parse_stop = fnmatch.fnmatch(article_name, f"*{word}*")
+                    if parse_stop: break
 
-            for word in ignored_words:
-                parse_stop = fnmatch.fnmatch(article_name, f"*{word}*")
-                if parse_stop: continue
-
-            items.append(item(article_name, article_sum))
+                if (not parse_stop):
+                    items.append(item(article_name, article_sum))
 
         return items
 
