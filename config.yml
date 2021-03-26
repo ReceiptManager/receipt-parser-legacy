@@ -56,24 +56,21 @@ markets:
 sum_keys:
   - summe
   - gesamtbetrag
+  - gesantbetrag
   - gesamt
   - total
   - sum
   - zwischensumme
   - bar
   - te betalen
-  - eur
-  - gesantbetrag
-  - kg x
-  - stkx
-
-ignore_keys:
   - rockgeld
   - rusckgeld
-  - pfand
   - rückgeld
+
+ignore_keys:
   - mwst
-  - leergut
+  - kg x
+  - stkx
 
 sum_format: '\d+(\.\s?|,\s?|[^a-zA-Z\d])\d{2}'
 
