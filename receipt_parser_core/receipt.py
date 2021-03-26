@@ -112,8 +112,8 @@ class Receipt(object):
         stop_words = self.config.sum_keys
 
         for line in self.lines:
-            for stopWord in stop_words:
-                if fnmatch.fnmatch(line, f"*{stopWord}*"):
+            for stop_word in stop_words:
+                if fnmatch.fnmatch(line, f"*{stop_word}*"):
                     return items
 
             match = re.search(self.config.item_format, line)
