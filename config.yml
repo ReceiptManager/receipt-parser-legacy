@@ -71,6 +71,7 @@ ignore_keys:
   - mwst
   - kg x
   - stkx
+  - stk
 
 sum_format: '\d+(\.\s?|,\s?|[^a-zA-Z\d])\d{2}'
 
