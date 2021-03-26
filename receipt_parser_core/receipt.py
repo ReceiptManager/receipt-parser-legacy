@@ -113,8 +113,7 @@ class Receipt(object):
 
         for line in self.lines:
             for stopWord in stop_words:
-                parse_exit = fnmatch.fnmatch(line, f"*{stopWord}*")
-                if (parse_exit):
+                if fnmatch.fnmatch(line, f"*{stopWord}*"):
                     return items
 
             match = re.search(self.config.item_format, line)
