@@ -62,6 +62,10 @@ sum_keys:
   - zwischensumme
   - bar
   - te betalen
+  - eur
+  - gesantbetrag
+  - kg x
+  - stkx
 
 ignore_keys:
   - rockgeld
