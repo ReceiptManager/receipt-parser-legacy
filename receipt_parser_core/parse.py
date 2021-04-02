@@ -18,7 +18,6 @@
 import os
 import time
 from collections import defaultdict
-import json
 
 from terminaltables import SingleTable
 
@@ -119,7 +118,9 @@ def ocr_receipts(config, receipt_files):
 
             item_list = ""
             for item in receipt.items:
-                if not item: continue
+                if not item:
+                    continue
+
                 item_list += ' '.join(item) + "\n"
 
             table_data.append(
