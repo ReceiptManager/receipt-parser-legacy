@@ -148,12 +148,15 @@ class Receipt(object):
         for int_accuracy in range(10, 6, -1):
             accuracy = int_accuracy / 10.0
 
+            min_accuracy, market_match = -1, None
             for market, spellings in self.config.markets.items():
                 for spelling in spellings:
                     line = self.fuzzy_find(spelling, accuracy)
-                    if line:
-                        # print(line, accuracy, market)
-                        return market
+                    if line and (accuracy < min_accuracy or min_accuracy == -1):
+                        min_accuracy = accuracy
+                        market_match = market
+
+        return market_match
 
     def parse_sum(self):
         """
@@ -184,4 +187,5 @@ class Receipt(object):
             "items": self.items,
             "lines": self.lines
         }
+
         return json.dumps(object_data)
