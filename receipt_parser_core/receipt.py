@@ -15,12 +15,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 import fnmatch
+import json
 import re
+from collections import namedtuple
 from difflib import get_close_matches
 
 import dateutil.parser
-from collections import namedtuple
-import json
 
 
 class Receipt(object):
@@ -120,19 +120,21 @@ class Receipt(object):
             if hasattr(match, 'group'):
                 article_name = match.group(1)
 
-                if (match.group(2) == "-"):
+                if match.group(2) == "-":
                     article_sum = "-" + match.group(3).replace(",", ".")
                 else:
                     article_sum = match.group(3).replace(",", ".")
             else:
                 continue
-            
-            if (len(article_name) > 3):
+
+            if len(article_name) > 3:
+                parse_stop = None
                 for word in ignored_words:
                     parse_stop = fnmatch.fnmatch(article_name, f"*{word}*")
-                    if parse_stop: break
+                    if parse_stop:
+                        break
 
-                if (not parse_stop):
+                if not parse_stop:
                     items.append(item(article_name, article_sum))
 
         return items
@@ -146,12 +148,15 @@ class Receipt(object):
         for int_accuracy in range(10, 6, -1):
             accuracy = int_accuracy / 10.0
 
+            min_accuracy, market_match = -1, None
             for market, spellings in self.config.markets.items():
                 for spelling in spellings:
                     line = self.fuzzy_find(spelling, accuracy)
-                    if line:
-                        # print(line, accuracy, market)
-                        return market
+                    if line and (accuracy < min_accuracy or min_accuracy == -1):
+                        min_accuracy = accuracy
+                        market_match = market
+
+        return market_match
 
     def parse_sum(self):
         """
@@ -170,7 +175,6 @@ class Receipt(object):
                 if sum_float:
                     return sum_float.group(0)
 
-
     def to_json(self):
         """
         :return: json
@@ -183,4 +187,5 @@ class Receipt(object):
             "items": self.items,
             "lines": self.lines
         }
+
         return json.dumps(object_data)
