@@ -111,12 +111,19 @@ class Receipt(object):
         ignored_words = self.config.ignore_keys
         stop_words = self.config.sum_keys
 
-        for line in self.lines:
-            for stop_word in stop_words:
-                if fnmatch.fnmatch(line, f"*{stop_word}*"):
-                    return items
+        if self.market == "Metro":
+            item_format = self.config.item_format_metro
+        else:
+            item_format = self.config.item_format
 
-            match = re.search(self.config.item_format, line)
+        for line in self.lines:
+            if self.market != "Metro":
+                for stop_word in stop_words:
+                    if fnmatch.fnmatch(line, f"*{stop_word}*"):
+                        print(stop_word)
+                        return items
+
+            match = re.search(item_format, line)
             if hasattr(match, 'group'):
                 article_name = match.group(1)
 
@@ -155,6 +162,7 @@ class Receipt(object):
                     if line and (accuracy < min_accuracy or min_accuracy == -1):
                         min_accuracy = accuracy
                         market_match = market
+                        return market_match
 
         return market_match
 
