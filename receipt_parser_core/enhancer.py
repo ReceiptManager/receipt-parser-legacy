@@ -257,7 +257,7 @@ def process_receipt(config, filename, rotate=True, grayscale=True, gaussian_blur
 
     cv2.imwrite(tmp_path, img)
 
-    sharpen_image(tmp_path, tmp_path, rotate)
+    sharpen_image(tmp_path, tmp_path)
     run_tesseract(tmp_path, output_path, config.language)
 
     print(ORANGE + '~: ' + RESET + 'Store parsed text at: ' + ORANGE + output_path + RESET)
