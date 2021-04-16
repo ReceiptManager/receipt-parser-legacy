@@ -248,10 +248,10 @@ def process_receipt(config, filename, rotate=True, grayscale=True, gaussian_blur
     except FileNotFoundError:
         return Receipt(config=config, raw="")
 
-    img = enhance_image(img, tmp_path,grayscale, gaussian_blur)
     tmp_path = os.path.join(
         TMP_FOLDER, filename
     )
+    img = enhance_image(img, tmp_path,grayscale, gaussian_blur)
 
     print(ORANGE + '~: ' + RESET + 'Temporary store image at: ' + ORANGE + tmp_path + RESET)
 
