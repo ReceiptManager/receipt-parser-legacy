@@ -22,6 +22,7 @@ import numpy as np
 from PIL import Image
 from pytesseract import pytesseract
 from wand.image import Image as WandImage
+from scipy.ndimage import interpolation as inter
 
 from receipt_parser_core import Receipt
 from receipt_parser_core.config import read_config
@@ -87,8 +88,36 @@ def rotate_image(input_file, output_file, angle=90):
             rotated.rotate(angle)
             rotated.save(filename=output_file)
 
+def deskew_image(image, delta=1, limit=5):
+    def determine_score(arr, angle):
+        data = inter.rotate(arr, angle, reshape=False, order=0)
+        histogram = np.sum(data, axis=1)
+        score = np.sum((histogram[1:] - histogram[:-1]) ** 2)
+        return histogram, score
 
-def sharpen_image(input_file, output_file, rotate=True):
+    gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+    thresh = cv2.threshold(gray, 0, 255, cv2.THRESH_BINARY_INV + cv2.THRESH_OTSU)[1] 
+
+    scores = []
+    angles = np.arange(-limit, limit + delta, delta)
+    for angle in angles:
+        histogram, score = determine_score(thresh, angle)
+        scores.append(score)
+
+    best_angle = angles[scores.index(max(scores))]
+
+    (h, w) = image.shape[:2]
+    center = (w // 2, h // 2)
+    M = cv2.getRotationMatrix2D(center, best_angle, 1.0)
+
+    print(ORANGE + '\t~: ' + RESET + 'Deskew image by: ' + str(best_angle) + ' angle' + RESET)
+
+    rotated = cv2.warpAffine(image, M, (w, h), flags=cv2.INTER_CUBIC, \
+              borderMode=cv2.BORDER_REPLICATE)
+
+    return rotated
+
+def sharpen_image(input_file, output_file):
     """
     :param input_file: str
         Path to image to prettify
@@ -97,9 +126,6 @@ def sharpen_image(input_file, output_file, rotate=True):
     :return: void
         Prettifies image and saves result
     """
-
-    if rotate:
-        rotate_image(input_file, output_file)
 
     print(ORANGE + '\t~: ' + RESET + 'Increase image contrast and sharp image' + RESET)
 
@@ -155,11 +181,30 @@ def remove_noise(img):
 
     print(ORANGE + '\t~: ' + RESET + 'Applying gaussianBlur and medianBlur' + RESET)
 
-    img = cv2.threshold(cv2.GaussianBlur(img, (5, 5), 0), 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)[1]
+    img = cv2.threshold(cv2.GaussianBlur(img, (5, 5), 0), 150, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)[1]
     img = cv2.threshold(cv2.bilateralFilter(img, 5, 75, 75), 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)[1]
     img = cv2.adaptiveThreshold(cv2.bilateralFilter(img, 9, 75, 75), 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C,
                                 cv2.THRESH_BINARY, 31, 2)
+
     return img
+
+
+def remove_shadows(img):
+    rgb_planes = cv2.split(img)
+
+    result_planes = []
+    result_norm_planes = []
+    for plane in rgb_planes:
+        dilated_img = cv2.dilate(plane, np.ones((7,7), np.uint8))
+        bg_img = cv2.medianBlur(dilated_img, 21)
+        diff_img = 255 - cv2.absdiff(plane, bg_img)
+        norm_img = cv2.normalize(diff_img,None, alpha=0, beta=255, norm_type=cv2.NORM_MINMAX, dtype=cv2.CV_8UC1)
+        result_planes.append(diff_img)
+        result_norm_planes.append(norm_img)
+
+    result = cv2.merge(result_planes)
+
+    return result
 
 
 def detect_orientation(image):
@@ -170,8 +215,16 @@ def detect_orientation(image):
     return image
 
 
-def enhance_image(img, high_contrast=True, gaussian_blur=True):
+def enhance_image(img, tmp_path ,high_contrast=True, gaussian_blur=True, rotate=True): 
     img = rescale_image(img)
+
+    if rotate:
+        cv2.imwrite(tmp_path, img)
+        rotate_image(tmp_path, tmp_path)
+        img = cv2.imread(tmp_path)
+
+    img = deskew_image(img)
+    img = remove_shadows(img)
 
     if high_contrast:
         img = grayscale_image(img)
@@ -195,7 +248,7 @@ def process_receipt(config, filename, rotate=True, grayscale=True, gaussian_blur
     except FileNotFoundError:
         return Receipt(config=config, raw="")
 
-    img = enhance_image(img, grayscale, gaussian_blur)
+    img = enhance_image(img, tmp_path,grayscale, gaussian_blur)
     tmp_path = os.path.join(
         TMP_FOLDER, filename
     )
@@ -244,7 +297,7 @@ def main():
             len(images)) + RESET + ') : ' + input_path + RESET)
 
         img = cv2.imread(input_path)
-        img = enhance_image(img)
+        img = enhance_image(img, tmp_path)
         cv2.imwrite(tmp_path, img)
 
         sharpen_image(tmp_path, tmp_path)
