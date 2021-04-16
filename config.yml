@@ -18,6 +18,7 @@ markets:
      - Delhaize
      - delhaize
   Penny:
+     - penny markt
      - penny
      - p e n n y
      - m a r k t gmbh
@@ -53,12 +54,12 @@ markets:
      - genossenschaft migros
   Metro:
      - vetro
-     - netro
      - metro
 
 # Sum keys roughly ordered by likelyhood.
 sum_keys:
   - summe
+  - summe eur
   - gesamtbetrag
   - gesantbetrag
   - gesamt
