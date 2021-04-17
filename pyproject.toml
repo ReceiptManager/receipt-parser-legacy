@@ -1,7 +1,7 @@
 [tool.poetry]
 name = "receipt_parser_core"
 
-version = "0.2.1"
+version = "0.2.2"
 
 description = "A supermarket receipt parser written in Python using tesseract OCR"
 
@@ -29,6 +29,7 @@ pytesseract = "^0.3.6"
 terminaltables = "^3.1.0"
 numpy = "^1.19.4"
 opencv-python = "^4.4.0"
+scipy = "^1.6.2" 
 
 [tool.poetry.dev-dependencies]
 pytest = "^6.1.2"
