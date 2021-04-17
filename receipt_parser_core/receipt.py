@@ -120,7 +120,6 @@ class Receipt(object):
             if self.market != "Metro":
                 for stop_word in stop_words:
                     if fnmatch.fnmatch(line, f"*{stop_word}*"):
-                        print(stop_word)
                         return items
 
             match = re.search(item_format, line)
