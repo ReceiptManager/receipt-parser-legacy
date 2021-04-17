@@ -1,12 +1,10 @@
 [tool.poetry]
 name = "receipt_parser_core"
 
-version = "0.2.2"
-
+version = "0.2.3"
 description = "A supermarket receipt parser written in Python using tesseract OCR"
 
 authors = ["Matthias Endler <matthias-endler@gmx.net>", "William Todt <william.todt@mailbox.org>", "Linus Dietz <me@linusdietz.eu>" ]
-
 license = "Apache-2.0"
 
 homepage = "https://github.com/ReceiptManager/receipt-parser-legacy"
