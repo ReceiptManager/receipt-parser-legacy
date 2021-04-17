@@ -117,25 +117,6 @@ def deskew_image(image, delta=1, limit=5):
 
     return rotated
 
-def sharpen_image(input_file, output_file):
-    """
-    :param input_file: str
-        Path to image to prettify
-    :param output_file: str
-        Path to output image
-    :return: void
-        Prettifies image and saves result
-    """
-
-    print(ORANGE + '\t~: ' + RESET + 'Increase image contrast and sharp image' + RESET)
-
-    with WandImage(filename=output_file) as img:
-        img.auto_level()
-        img.sharpen(radius=0, sigma=4.0)
-        img.contrast()
-        img.save(filename=output_file)
-
-
 def run_tesseract(input_file, output_file, language="deu"):
     """
     :param input_file: str
@@ -256,8 +237,6 @@ def process_receipt(config, filename, rotate=True, grayscale=True, gaussian_blur
     print(ORANGE + '~: ' + RESET + 'Temporary store image at: ' + ORANGE + tmp_path + RESET)
 
     cv2.imwrite(tmp_path, img)
-
-    sharpen_image(tmp_path, tmp_path)
     run_tesseract(tmp_path, output_path, config.language)
 
     print(ORANGE + '~: ' + RESET + 'Store parsed text at: ' + ORANGE + output_path + RESET)
@@ -300,7 +279,6 @@ def main():
         img = enhance_image(img, tmp_path)
         cv2.imwrite(tmp_path, img)
 
-        sharpen_image(tmp_path, tmp_path)
         run_tesseract(tmp_path, out_path, config.language)
 
         i = i + 1
