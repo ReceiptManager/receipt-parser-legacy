@@ -1,4 +1,4 @@
-FROM python:3
+FROM python:3.7
 RUN apt-get update && apt-get install -y tesseract-ocr-all imagemagick ffmpeg libsm6 libxext6
 RUN pip install poetry
 WORKDIR /app
