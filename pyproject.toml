@@ -18,8 +18,8 @@ readme = "README.md"
 generate-setup-file = false
 
 [tool.poetry.dependencies]
-python = "^3.7"
-pyyaml = "^5.3"
+python = "3.7"
+pyyaml = "^5.3.1"
 python-dateutil = "^2.8.1"
 Pillow = "^8.1.1"
 wand = "^0.6.3"
