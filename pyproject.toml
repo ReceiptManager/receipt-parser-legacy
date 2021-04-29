@@ -32,7 +32,7 @@ scipy = "^1.6.2"
 
 [tool.poetry.dev-dependencies]
 pytest = "^6.1.2"
-black = {version = "^20.8b1", allow-prereleases = true}
+black = {version = "^21.4b1", allow-prereleases = true}
 
 [tool.poetry.scripts]
 run = 'receipt_parser_core:main'
