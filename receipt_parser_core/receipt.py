@@ -117,6 +117,15 @@ class Receipt(object):
             item_format = self.config.item_format
 
         for line in self.lines:
+            parse_stop = None
+            for ignore_word in ignored_words:
+                parse_stop = fnmatch.fnmatch(line, f"*{ignore_word}*")
+                if parse_stop:
+                    break
+
+            if parse_stop:
+                continue
+
             if self.market != "Metro":
                 for stop_word in stop_words:
                     if fnmatch.fnmatch(line, f"*{stop_word}*"):
@@ -133,15 +142,7 @@ class Receipt(object):
             else:
                 continue
 
-            if len(article_name) > 3:
-                parse_stop = None
-                for word in ignored_words:
-                    parse_stop = fnmatch.fnmatch(article_name, f"*{word}*")
-                    if parse_stop:
-                        break
-
-                if not parse_stop:
-                    items.append(item(article_name, article_sum))
+            items.append(item(article_name, article_sum))
 
         return items
 
