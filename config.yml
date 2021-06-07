@@ -82,7 +82,7 @@ ignore_keys:
 sum_format: '\d+(\.\s?|,\s?|[^a-zA-Z\d])\d{2}'
 
 item_format: '([a-zA-Z].+)\s(-|)((\d|\d{2}),(\d{2}|\d{3}))\s'
-item_format_metro: '[0-9]\s(.*?)\d.()((\d|\d{2})(\,|\.)\d{2})\s([A|a]|[B|b])'
+item_format_metro: '[0-9]\s(.*?)\d.()((\d|\d{2})(\,|\.)\d{1,2})\s([A|a]|[B|b])'
 
 # Matches dates like 19.08.15 and 19.08.2015
 date_format: '((\d{2}\.\d{2}\.\d{2,4})|(\d{2,4}\/\d{2}\/\d{2})|(\d{2}\/\d{2}\/\d{4}))'
