@@ -31,7 +31,7 @@ opencv-python = "^4.4.0"
 scipy = "^1.6.2" 
 
 [tool.poetry.dev-dependencies]
-pytest = "^6.2.5"
+pytest = "^7.0.0"
 black = {version = "^21.12b0", allow-prereleases = true}
 
 [tool.poetry.scripts]
