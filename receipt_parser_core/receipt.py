@@ -110,10 +110,6 @@ class Receipt(object):
         stop_words = self.config.get_config("sum_keys", self.market)
         item_format = self.config.get_config("item_format", self.market)
 
-        print(item_format)
-        print(ignored_words)
-        print(stop_words)
-
         for line in self.lines:
             parse_stop = None
             for ignore_word in ignored_words:
@@ -136,7 +132,7 @@ class Receipt(object):
                 if match.group(2) == "-":
                     article_sum = "-" + match.group(3).replace(",", ".")
                 else:
-                    article_sum = match.group(3).replace(",", ".")
+                    article_sum = match.group(3)
             else:
                 continue
 
