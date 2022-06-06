@@ -17,7 +17,7 @@
 
 
 class ObjectView(object):
-    """ View objects as dicts """
+    """View objects as dicts"""
 
     def __init__(self, d):
         """
@@ -26,3 +26,21 @@ class ObjectView(object):
         """
 
         self.__dict__ = d
+
+    def __getitem__(self, item):
+        """
+        Use ObjectView like dict
+        :param item: str | int
+            Object value
+        """
+        return self.__dict__[item]
+
+    def get_config(self, key, market):
+        """
+        Get custom market config if available, otherwise return default config.
+        :param key: str
+        :param market: str
+            Object value
+        """
+        custom_config_key = f"{key}_{market.lower()}"
+        return self.__dict__.get(custom_config_key, self.__dict__[key])
