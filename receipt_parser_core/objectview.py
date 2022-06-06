@@ -17,7 +17,7 @@
 
 
 class ObjectView(object):
-    """View objects as dicts"""
+    """ View objects as dicts """
 
     def __init__(self, d):
         """

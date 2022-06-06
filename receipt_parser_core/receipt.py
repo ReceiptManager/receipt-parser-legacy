@@ -24,7 +24,7 @@ import dateutil.parser
 
 
 class Receipt(object):
-    """Market receipt to be parsed"""
+    """ Market receipt to be parsed """
 
     def __init__(self, config, raw):
         """
@@ -52,7 +52,9 @@ class Receipt(object):
 
         """
 
-        self.lines = [line.lower() for line in self.lines if line.strip()]
+        self.lines = [
+            line.lower() for line in self.lines if line.strip()
+        ]
 
     def parse(self):
         """
@@ -126,13 +128,13 @@ class Receipt(object):
                         return items
 
             match = re.search(item_format, line)
-            if hasattr(match, "group"):
+            if hasattr(match, 'group'):
                 article_name = match.group(1)
 
                 if match.group(2) == "-":
                     article_sum = "-" + match.group(3).replace(",", ".")
                 else:
-                    article_sum = match.group(3)
+                    article_sum = match.group(3).replace(",", ".")
             else:
                 continue
 
@@ -187,7 +189,7 @@ class Receipt(object):
             "date": self.date,
             "sum": self.sum,
             "items": self.items,
-            "lines": self.lines,
+            "lines": self.lines
         }
 
         return json.dumps(object_data)
