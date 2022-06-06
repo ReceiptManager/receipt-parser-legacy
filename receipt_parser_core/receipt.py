@@ -108,13 +108,9 @@ class Receipt(object):
         items = []
         item = namedtuple("item", ("article", "sum"))
 
-        ignored_words = self.config.ignore_keys
-        stop_words = self.config.sum_keys
-
-        if self.market == "Metro":
-            item_format = self.config.item_format_metro
-        else:
-            item_format = self.config.item_format
+        ignored_words = self.config.get_config("ignore_keys", self.market)
+        stop_words = self.config.get_config("sum_keys", self.market)
+        item_format = self.config.get_config("item_format", self.market)
 
         for line in self.lines:
             parse_stop = None
