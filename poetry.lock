@@ -263,7 +263,7 @@ python-versions = "*"
 
 [[package]]
 name = "wand"
-version = "0.6.7"
+version = "0.6.8"
 description = "Ctypes-based simple MagickWand API binding for Python"
 category = "main"
 optional = false
@@ -531,6 +531,6 @@ typing-extensions = [
     {file = "typing_extensions-3.10.0.2.tar.gz", hash = "sha256:49f75d16ff11f1cd258e1b988ccff82a3ca5570217d7ad8c5f48205dd99a677e"},
 ]
 wand = [
-    {file = "Wand-0.6.7-py2.py3-none-any.whl", hash = "sha256:5ba497e90741a05ebce4603b04ee843150c566482a753554da54dc57d8503bba"},
-    {file = "Wand-0.6.7.tar.gz", hash = "sha256:ebc01bccc25dba68414ab55b482341f9ad2b197d7f49d5e724f339bbf63fb6db"},
+    {file = "Wand-0.6.8-py2.py3-none-any.whl", hash = "sha256:7dd08b71a312314f438936d58f583f6d4a5b8dfd927e6852cd2035e785d5d3a6"},
+    {file = "Wand-0.6.8.tar.gz", hash = "sha256:716abd099350a88a2dfd07d3e3656d25e98936b16d8101b75d947e8ad57eb072"},
 ]
