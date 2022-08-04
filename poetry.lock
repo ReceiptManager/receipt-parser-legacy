@@ -137,8 +137,8 @@ optional = false
 python-versions = ">=3.6"
 
 [package.extras]
-docs = ["Sphinx (>=4)", "furo (>=2021.7.5b38)", "proselint (>=0.10.2)", "sphinx-autodoc-typehints (>=1.12)"]
-test = ["appdirs (==1.4.4)", "pytest (>=6)", "pytest-cov (>=2.7)", "pytest-mock (>=3.6)"]
+test = ["pytest-mock (>=3.6)", "pytest-cov (>=2.7)", "pytest (>=6)", "appdirs (==1.4.4)"]
+docs = ["sphinx-autodoc-typehints (>=1.12)", "proselint (>=0.10.2)", "furo (>=2021.7.5b38)", "Sphinx (>=4)"]
 
 [[package]]
 name = "pluggy"
@@ -263,7 +263,7 @@ python-versions = "*"
 
 [[package]]
 name = "wand"
-version = "0.6.7"
+version = "0.6.9"
 description = "Ctypes-based simple MagickWand API binding for Python"
 category = "main"
 optional = false
@@ -531,6 +531,6 @@ typing-extensions = [
     {file = "typing_extensions-3.10.0.2.tar.gz", hash = "sha256:49f75d16ff11f1cd258e1b988ccff82a3ca5570217d7ad8c5f48205dd99a677e"},
 ]
 wand = [
-    {file = "Wand-0.6.7-py2.py3-none-any.whl", hash = "sha256:5ba497e90741a05ebce4603b04ee843150c566482a753554da54dc57d8503bba"},
-    {file = "Wand-0.6.7.tar.gz", hash = "sha256:ebc01bccc25dba68414ab55b482341f9ad2b197d7f49d5e724f339bbf63fb6db"},
+    {file = "Wand-0.6.9-py2.py3-none-any.whl", hash = "sha256:4deb6dfebc6fd8d29a3f20d8664910081622aa02913777ca08a23bf5d25bbc0f"},
+    {file = "Wand-0.6.9.tar.gz", hash = "sha256:40274e8829a8db53fdbe328f58057a5ab7e2ebae07c77b89f15e3807698bb5bc"},
 ]
