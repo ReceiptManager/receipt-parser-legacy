@@ -33,7 +33,7 @@ make docker-run
 By default, running the image will execute the `make run` command. To use with your own images, run the following:
 
 ```
-docker run -v <path_to_input_images>:/usr/src/app/data/img mre0/receipt_parser
+docker run -v <path_to_input_images>:/app/data/img mre0/receipt_parser
 ```
 
 ## History
